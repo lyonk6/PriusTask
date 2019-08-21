@@ -1,0 +1,20 @@
+/bin/
+*/target/
+*/WebContent/
+*bin/
+*workspace/
+*data/
+*~
+# exclude hidden R data files.                                                                                                                                                                          
+*.Rhistory
+*.RData
+# exclude hidden osx data files.                                                                                                                                                                        
+.DS_Store
+temp
+.~lock.*
+# Exclide IDE related files:
+*eclipse*
+.idea/
+*.settings/
+*.iml
+build/*
