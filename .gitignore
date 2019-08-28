@@ -18,5 +18,6 @@ temp
 *.settings/
 *.iml
 build/*
-cert.pem
-key.pem
+*cert.pem
+*key.pem
+main

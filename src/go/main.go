@@ -2,17 +2,17 @@ package main
 
 import (
      "fmt"
-     "net/http"
-		 "strings"
+     "net/http"     
+     "strings"     
 )
 
 func main(){
      http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
          w.Write([]byte("\"Welcome to PriusTask!\""))
          // w.Write([]byte(r.Body))
-         //fmt.Printf("%+v\n", r)
+	 //fmt.Printf("%+v\n", r)
          //fmt.Printf("Here is the body:%T ", r.Body,  r.Body, "\n")
-		 formatRequest(r)
+         fmt.Println(formatRequest(r))
     })
 
      http.ListenAndServeTLS(":3000", "certs/cert.pem", "certs/key.pem", nil)
@@ -41,4 +41,4 @@ func formatRequest(r *http.Request) string {
     request = append(request, r.Form.Encode())
  }   // Return the request as a string
   return strings.Join(request, "\n")
-}
+    }//*/
