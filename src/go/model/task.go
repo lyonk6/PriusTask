@@ -1,13 +1,13 @@
 package model
 
 type Task struct {
-	id                   int32
-	userId               int32
-	memo                 string
-	repeatIntervalInDays int64
-	taskLength           int64
-	dueDate              int64
-	creationDate         int64
-	creationLongitude    int64
-	creationLatitude     int64
+    Id                   int32  `json:"id"`      
+    UserId               int32  `json:"userId"`      
+    Memo                 string `json:"memo"`      
+    RepeatIntervalInDays int64  `json:"repeatIntervalInDays"`
+    TaskLength           int64  `json:"taskLength"`      
+    DueDate              int64  `json:"dueDate"`      
+    CreationDate         int64  `json:"creationDate"`      
+    CreationLongitude    int64  `json:"creationLongitude"`   
+    CreationLatitude     int64  `json:"creationLatitude"`    
 }
