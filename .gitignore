@@ -17,7 +17,7 @@ temp
 .idea/
 *.settings/
 *.iml
-build/*
+build
 *cert.pem
 *key.pem
 main
