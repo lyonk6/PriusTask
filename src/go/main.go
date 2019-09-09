@@ -27,8 +27,8 @@ func main() {
  * DumpRequest is used to dump an incomming request to CLI. This is helpful
  * for debugging REST calls. *
  */
-func DumpRequest(w http.ResponseWriter, req *http.Request) {
-	requestDump, err := httputil.DumpRequest(req, true)
+func DumpRequest(w http.ResponseWriter, r *http.Request) {
+	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
 		//fmt.Fprint(w, err.Error())
 		fmt.Println(string(requestDump))
