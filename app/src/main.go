@@ -1,7 +1,7 @@
 package main
 
 import (
-    "controller"
+    "model"
     "fmt"
     "io/ioutil"
     "net/http"
@@ -12,7 +12,7 @@ import (
 
 func main() {
     portNumber, _ := getParameters()
-    controller.RegisterRoutes()
+    model.RegisterRoutes()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte("\"Welcome to PriusTask!\""))
         //w.Write([]byte(r.Body))
