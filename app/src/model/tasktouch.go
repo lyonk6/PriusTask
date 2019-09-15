@@ -1,10 +1,5 @@
 package model
 
-import (
-    "fmt"
-    "net/http"
-)
-
 //TaskTouch is an instance of a user updating or interacting with a Task.
 type TaskTouch struct {
     ID                int32   `json:"id"`
@@ -17,10 +12,4 @@ type TaskTouch struct {
     Accuracy          float32 `json:"accuracy"`
     NetworkType       string  `json:"networkType"`
     TouchType         string  `json:"touchType"`
-}
-
-func (t TaskTouch) registerRoutes() {
-    http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Print("PostTaskTouch: ", r.Body)
-    })
 }
