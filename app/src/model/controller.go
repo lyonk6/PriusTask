@@ -15,14 +15,14 @@ func RegisterRoutes() {
         var taskTouch TaskTouch
         err := dec.Decode(&taskTouch)
         fmt.Print("PostTaskTouch: ", err, " time: ", taskTouch.LocationTimeStamp)
-        fmt.Print(" longitude: ", taskTouch.Longitude, " latitude: ", taskTouch.Latitude)
+        fmt.Println(" longitude: ", taskTouch.Longitude, " latitude: ", taskTouch.Latitude)
     })
 
     http.HandleFunc("/GetTasks", func(w http.ResponseWriter, r *http.Request) {
         dec := json.NewDecoder(r.Body)
         var taskTouch TaskTouch
         err := dec.Decode(&taskTouch)
-        fmt.Print("GetTasks: ", err, " TODO: recieve a TaskTouch here.")
+        fmt.Println("GetTasks: ", err, " TODO: recieve a TaskTouch here.")
     })
 
     http.HandleFunc("/PutTask", func(w http.ResponseWriter, r *http.Request) {
