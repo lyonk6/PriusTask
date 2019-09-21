@@ -1,6 +1,5 @@
 package model
 
-
 // Task is an Object for holding a task.
 type Task struct {
     ID                   int32  `json:"id"`

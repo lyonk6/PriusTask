@@ -1,43 +1,30 @@
 package main
 
 import (
-    "model"
+	"database/sql"
     "fmt"
     "io/ioutil"
+    "model"
     "net/http"
-    "net/http/httputil"
     "strconv"
     "strings"
+
+    _ "github.com/lib/pq" //driver for postgres
 )
 
 func main() {
-    portNumber, _ := getParameters()
+    portNumber, url := getParameters()
+    connectToDatabase(url)
     model.RegisterRoutes()
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte("\"Welcome to PriusTask!\""))
-        //w.Write([]byte(r.Body))
-        //fmt.Printf("%+v\n", r)
-
-        // DumpRequest for debugging purposes.
-        DumpRequest(w, r)
-    })
-
     http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
 }
 
-/**
- * DumpRequest is used to dump an incomming request to CLI. This is helpful
- * for debugging REST calls. *
- */
-func DumpRequest(w http.ResponseWriter, r *http.Request) {
-    requestDump, err := httputil.DumpRequest(r, true)
+func connectToDatabase(url string) {
+    db, err := sql.Open("postgres", url)
     if err != nil {
-        //fmt.Fprint(w, err.Error())
-        fmt.Println(string(requestDump))
-    } else {
-        //fmt.Fprint(w, string(requestDump))
-        fmt.Println(string(requestDump))
+        fmt.Println(err)
     }
+    model.SetDatabase(db)
 }
 
 /**
