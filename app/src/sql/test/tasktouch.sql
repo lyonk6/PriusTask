@@ -1,6 +1,6 @@
-# 
+#
 # var touchTypes = []string{'SAVED', 'DELETED', 'COMPLETED', 'DISMISSED', 'START_UP', 'HEART_BEAT', 'CREATED'}
-# 
+#
 # //TaskTouch is an instance of a user updating or interacting with a Task.
 # type TaskTouch struct {
 #     ID                int32   `json:'id'`
@@ -14,16 +14,16 @@
 #     NetworkType       string  `json:'networkType'`
 #     TouchType         string  `json:'touchType'`
 # }
-# 
+#
 CREATE TABLE tasktouch(
-  ID    serial PRIMARY KEY,
-  UserID            INTEGER,   
-  TaskID            INTEGER,   
-  TouchTimeStamp    BIGINT,   
-  LocationTimeStamp BIGINT,   
-  Longitude         float8, 
-  Latitude          float8, 
-  Accuracy          float8, 
+  ID  BIGSERIAL PRIMARY KEY,
+  UserID            INTEGER,
+  TaskID            INTEGER,
+  TouchTimeStamp    BIGINT,
+  LocationTimeStamp BIGINT,
+  Longitude         float8,
+  Latitude          float8,
+  Accuracy          float8,
   NetworkType       varchar(100),
   TouchType         varchar(40)
 );

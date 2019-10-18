@@ -6,9 +6,9 @@
 # }
 
 CREATE TABLE account(
-   ID serial PRIMARY KEY,
+   ID            BIGSERIAL PRIMARY KEY,
    Email VARCHAR (355) UNIQUE NOT NULL,
-   Password VARCHAR(1048)
+   Password     VARCHAR(1048) NOT NULL
 );
 
 
@@ -19,4 +19,3 @@ VALUES
 INSERT INTO account(Email, Password)
 VALUES
 ('blue@fire.com', 'cool345') RETURNING ID;
-

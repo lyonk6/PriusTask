@@ -10,27 +10,26 @@
 #     CreationLongitude    int64  `json:'creationLongitude'`
 #     CreationLatitude     int64  `json:'creationLatitude'`
 # }
-# 
+#
 
 CREATE TABLE task(
- ID        serial PRIMARY KEY,
- UserID               INTEGER,  
+ ID     BIGSERIAL PRIMARY KEY,
+ UserID               INTEGER,
  Memo                 VARCHAR(1000),
- RepeatIntervalInDays BIGINT,  
- TaskLength           BIGINT,  
- DueDate              BIGINT,  
- CreationDate         BIGINT,  
- CreationLongitude    BIGINT,  
+ RepeatIntervalInDays BIGINT,
+ TaskLength           BIGINT,
+ DueDate              BIGINT,
+ CreationDate         BIGINT,
+ CreationLongitude    BIGINT,
  CreationLatitude     BIGINT
 );
 
 
 INSERT INTO task(CreationDate, CreationLatitude, CreationLongitude,      DueDate,  Memo                   , RepeatIntervalInDays, TaskLength, UserId)
-VALUES 
+VALUES
 (156396319123,                0,                 0,            0,  'Buy Dog Food'         ,                   60,     900000,      0),
 (156396319214,                0,                 0,            0,  'Wash Cat'             ,                    7,     900000,      0),
 (156396319305,                0,                 0,            0,  'File for an extension',                  365,     900000,      0),
 (156396319496,                0,                 0,1563963191000,  'Check the Time'       ,                    0,     900000,      0),
 (156396319587,                0,                 0,517678260000 ,  'Start Life'           ,                    0,     900000,      0),
 (156396319678,                0,                 0,946684800000 ,  'Survive y2k'          ,                    0,     900000,      0) RETURNING ID;
- 
