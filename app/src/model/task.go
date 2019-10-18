@@ -4,8 +4,8 @@ import "fmt"
 
 // Task is an Object for holding a task.
 type Task struct {
-	ID                   int32  `json:"id"`
-	UserID               int32  `json:"userId"`
+	ID                   int64  `json:"id"`
+	UserID               int64  `json:"userId"`
 	Memo                 string `json:"memo"`
 	RepeatIntervalInDays int64  `json:"repeatIntervalInDays"`
 	TaskLength           int64  `json:"taskLength"`
