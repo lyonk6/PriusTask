@@ -1,10 +1,10 @@
-# // User is an account that owns Tasks.
-# type User struct {
-#     ID       int32  `json:"id"`
-#     Email    string `json:"email"`
-#     Password string `json:"password"`
-# }
-
+-- // User is an account that owns Tasks.
+-- type User struct {
+--     ID       int32  `json:"id"`
+--     Email    string `json:"email"`
+--     Password string `json:"password"`
+-- }
+DROP TABLE account
 CREATE TABLE account(
    ID            BIGSERIAL PRIMARY KEY,
    Email VARCHAR (355) UNIQUE NOT NULL,
