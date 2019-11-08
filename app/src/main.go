@@ -24,7 +24,7 @@ func connectToDatabase(url string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	model.SetDatabase(db, "priustask")
+	model.SetDatabase(db)
 }
 
 /**

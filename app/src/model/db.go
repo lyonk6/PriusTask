@@ -1,12 +1,12 @@
 package model
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 var db *sql.DB
-var dbName string
 
 //SetDatabase for this application
-func SetDatabase(database *sql.DB, n string) {
+func SetDatabase(database *sql.DB) {
 	db = database
-	dbName = n
 }

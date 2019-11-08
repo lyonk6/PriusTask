@@ -43,5 +43,5 @@ func (tt *TaskTouch) toString() string {
 	time := strconv.FormatInt(tt.TouchTimeStamp, 10)
 	long := strconv.FormatFloat(tt.Longitude, 'f', -1, 64)
 	lati := strconv.FormatFloat(tt.Latitude, 'f', -1, 64)
-	return "Date: " + time + "Longitude: " + long + "Latitude: " + lati
+	return "Date: " + time + " Longitude: " + long + " Latitude: " + lati
 }

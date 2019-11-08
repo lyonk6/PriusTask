@@ -1,3 +1,2 @@
 #!/bin/bash
-go test app/src/model/task_test.go
-
+go test -v app/src/model/*
