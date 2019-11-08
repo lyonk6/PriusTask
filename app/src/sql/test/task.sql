@@ -14,7 +14,7 @@
 DROP TABLE task;
 CREATE TABLE task(
  ID     BIGSERIAL PRIMARY KEY,
- UserID               INTEGER,
+ UserID               BIGSERIAL,
  Memo                 VARCHAR(1000),
  RepeatIntervalInDays BIGINT,
  TaskLength           BIGINT,

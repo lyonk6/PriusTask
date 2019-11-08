@@ -18,8 +18,8 @@
 DROP TABLE tasktouch;
 CREATE TABLE tasktouch(
   ID  BIGSERIAL PRIMARY KEY,
-  UserID            INTEGER,
-  TaskID            INTEGER,
+  UserID            BIGSERIAL,
+  TaskID            BIGSERIAL,
   TouchTimeStamp    BIGINT,
   LocationTimeStamp BIGINT,
   Longitude         float8,

@@ -1,5 +1,4 @@
-# // User is an account that owns Tasks.
-# TODO convert all primary Keys to "BIGSERIAL"
+--// User is an account that owns Tasks.
 CREATE TABLE account(
    ID            BIGSERIAL PRIMARY KEY,
    Email VARCHAR (355) UNIQUE NOT NULL,
@@ -11,7 +10,7 @@ CREATE TABLE account(
 # // Task is an Object for holding a task.
 CREATE TABLE task(
  ID     BIGSERIAL PRIMARY KEY,
- UserID               INTEGER,
+ UserID               BIGSERIAL,
  Memo                 VARCHAR(1000),
  RepeatIntervalInDays BIGINT,
  TaskLength           BIGINT,
@@ -25,8 +24,8 @@ CREATE TABLE task(
 # //TaskTouch is an instance of a user updating or interacting with a Task.
 CREATE TABLE tasktouch(
   ID  BIGSERIAL PRIMARY KEY,
-  UserID            INTEGER,
-  TaskID            INTEGER,
+  UserID            BIGSERIAL,
+  TaskID            BIGSERIAL,
   TouchTimeStamp    BIGINT,
   LocationTimeStamp BIGINT,
   Longitude         float8,
