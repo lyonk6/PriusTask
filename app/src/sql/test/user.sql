@@ -4,7 +4,7 @@
 --     Email    string `json:"email"`
 --     Password string `json:"password"`
 -- }
-DROP TABLE account
+DROP TABLE account;
 CREATE TABLE account(
    ID            BIGSERIAL PRIMARY KEY,
    Email VARCHAR (355) UNIQUE NOT NULL,
