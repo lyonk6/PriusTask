@@ -33,12 +33,18 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 	i := 0
 
 	fmt.Println("Check 7")
-	//fmt.Println(rows.Columns())
+	fmt.Print("Here are the columns: ")
+	fmt.Println(rows.Columns())
 
 	for rows.Next() {
 		fmt.Println("Check 8")
+		test := t.Memo
 		err := rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude)
-
+		if t.Memo == test {
+			fmt.Println("Looks like the task object isn't being updated by Scan call." + test + " " + t.Memo)
+		} else {
+			fmt.Println("Well look at that:" + test + " " + t.Memo)
+		}
 		fmt.Println("Check 9")
 		if err != nil {
 			panic(err)
@@ -49,6 +55,7 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 		fmt.Println("Check 10") //It breaks right here.
 		tasks[i] = *t
 		i++
+		fmt.Println("Check 11")
 	}
 	return tasks, nil
 }

@@ -6,14 +6,13 @@ import (
 )
 
 func TestGetTaskList(t *testing.T) {
-	fmt.Println("TestGetTaskList")
 	//func getTaskList(tt TaskTouch)
 	// Presently taskLists are just a list of tasks ordered by due date,
 	// thus we only need to test that the result returns a list of sorted
 	// tasks.
 	fmt.Println("Check 1")
 	setTestDatabase()
-
+	fmt.Println(db.Ping())
 	fmt.Println("Check 2")
 	defer catchError("Error in TestGetTaskList ")
 	tt := TaskTouch{}
@@ -22,26 +21,25 @@ func TestGetTaskList(t *testing.T) {
 	fmt.Println("Check 3")
 	tl, err := getTaskList(tt)
 
-	fmt.Println("Check 11")
+	fmt.Println("No unhandled exceptions in getTaskList")
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println("No handled exceptions in getTaskList")
 	}
 
-	fmt.Println("Check 12")
 	for i, v := range tl {
 		fmt.Println(i, ". ", v)
 	}
 }
 
 func TestUpdateTask(t *testing.T) {
-	fmt.Println("TestUpdateTask")
 	defer catchError("Error in TestUpdateTask ")
 	task := Task{}
 	updateTask(task)
 }
 
 func TestCreateTask(t *testing.T) {
-	fmt.Println("TestCreateTask")
 	defer catchError("Error in TestCreateTask ")
 	task := Task{}
 	createTask(task)

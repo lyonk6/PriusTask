@@ -12,11 +12,11 @@ import (
 func setTestDatabase() {
 	if db == nil {
 		url := getTestURL()
-		connectToDatabase(url)
+		connectToTestDatabase(url)
 	}
 }
 
-func connectToDatabase(url string) {
+func connectToTestDatabase(url string) {
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		panic(err)
@@ -37,7 +37,7 @@ func getTestURL() (databaseURL string) {
 
 	//Verify prefix for line 2 and assign databaseURL:
 	if strings.HasPrefix(mySlice[2], "testdb=") && len(mySlice[2]) > 13 {
-		fmt.Println("database URL: ", mySlice[3])
+		fmt.Println("test database URL: ", mySlice[3])
 		databaseURL = mySlice[2][7:]
 	} else {
 		panic("Malformed params file. database identifier 'testdb=' and database url expected.")
