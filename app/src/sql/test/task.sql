@@ -27,9 +27,9 @@ CREATE TABLE task(
 
 INSERT INTO task(CreationDate, CreationLatitude, CreationLongitude,      DueDate,  Memo                   , RepeatIntervalInDays, TaskLength, UserId)
 VALUES
-(156396319123,                0,                 0,            0,  'Buy Dog Food'         ,                   60,     900000,      0),
-(156396319214,                0,                 0,            0,  'Wash Cat'             ,                    7,     900000,      0),
-(156396319305,                0,                 0,            0,  'File for an extension',                  365,     900000,      0),
+(156396319123,                0,                 0,1573367057100,  'Buy Dog Food'         ,                   60,     900000,      0),
+(156396319214,                0,                 0,1573367057010,  'Wash Cat'             ,                    7,     900000,      0),
+(156396319305,                0,                 0,1573367057000,  'File for an extension',                  365,     900000,      0),
 (156396319496,                0,                 0,1563963191000,  'Check the Time'       ,                    0,     900000,      0),
-(156396319587,                0,                 0,517678260000 ,  'Start Life'           ,                    0,     900000,      0),
-(156396319678,                0,                 0,946684800000 ,  'Survive y2k'          ,                    0,     900000,      0) RETURNING ID;
+(156396319587,                0,                 0, 517678260000,  'Start Life'           ,                    0,     900000,      0),
+(156396319678,                0,                 0, 946684800000,  'Survive y2k'          ,                    0,     900000,      0) RETURNING ID;
