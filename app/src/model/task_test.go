@@ -2,19 +2,18 @@ package model
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 )
 
 func TestGetTaskList(t *testing.T) {
-	//func getTaskList(tt TaskTouch)
+	// func getTaskList(tt TaskTouch)
 	// Presently taskLists are just a list of tasks ordered by due date,
 	// thus we only need to test that the result returns a list of sorted
 	// tasks.
 	fmt.Println("Check 1")
 	setTestDatabase()
-	fmt.Println(db.Ping())
 	fmt.Println("Check 2")
-	defer catchError("Error in TestGetTaskList ")
 	tt := TaskTouch{}
 	tt.ID = 1
 
@@ -30,19 +29,27 @@ func TestGetTaskList(t *testing.T) {
 
 	for i, v := range tl {
 		fmt.Println(i, ". ", v)
+		//fmt.Println("Here is a due date: ", tl[i])
+		if i > 0 && tl[i].DueDate < tl[i-1].DueDate && tl[i].ID != 0 {
+			panic("Tasks not sorted by due date!")
+		}
+	}
+}
+
+func TestCreateTask(t *testing.T) {
+	task := Task{}
+	task.Memo = "This is the story of a girl"
+
+	createTask(&task)
+	_, err := db.Query(`DELETE FROM task WHERE id="` + strconv.FormatInt(task.ID, 10) + `"`)
+	if err != nil {
+		panic(err)
 	}
 }
 
 func TestUpdateTask(t *testing.T) {
-	defer catchError("Error in TestUpdateTask ")
-	task := Task{}
-	updateTask(task)
-}
-
-func TestCreateTask(t *testing.T) {
-	defer catchError("Error in TestCreateTask ")
-	task := Task{}
-	createTask(task)
+	// First get a task, then make a change to it. Then verify the
+	// change was made.
 }
 
 func TestToString(t *testing.T) {

@@ -18,46 +18,31 @@ type Task struct {
 }
 
 //Return a list of tasks ordered by due date.
-func getTaskList(tt TaskTouch) ([]Task, error) {
-	fmt.Println("Check 4")
-	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude FROM task ORDER BY DueDate DESC LIMIT 20;`)
-	fmt.Println("Check 5")
+func getTaskList(tt TaskTouch) ([20]Task, error) {
+	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude FROM task ORDER BY DueDate ASC LIMIT 20;`)
 
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("Check 6")
-	var tasks []Task
+	var tasks [20]Task
 	t := &Task{}
 	i := 0
 
-	fmt.Println("Check 7")
-	fmt.Print("Here are the columns: ")
-	fmt.Println(rows.Columns())
+	if err != nil {
+		return tasks, err
+	}
+
+	//fmt.Print("Here are the columns: ")
+	//fmt.Println(rows.Columns())
 
 	for rows.Next() {
-		fmt.Println("Check 8")
-		test := t.Memo
 		err := rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude)
-		if t.Memo == test {
-			fmt.Println("Looks like the task object isn't being updated by Scan call." + test + " " + t.Memo)
-		} else {
-			fmt.Println("Well look at that:" + test + " " + t.Memo)
-		}
-		fmt.Println("Check 9")
-		if err != nil {
-			panic(err)
-		} else {
-			fmt.Println(t.toString())
 
+		if err != nil {
+			return tasks, err
 		}
-		fmt.Println("Check 10") //It breaks right here.
+
 		tasks[i] = *t
 		i++
-		fmt.Println("Check 11")
 	}
-	return tasks, nil
+	return tasks, err
 }
 
 //Update a task in the database.
@@ -75,18 +60,20 @@ func updateTask(t Task) {
 	}
 }
 
-//TODO add a task to the Database.
-func createTask(t Task) {
+//TODO add a task to the Database and return the new Databases ID.
+func createTask(t *Task) error {
 	result, err := db.Exec(`
     INSERT INTO
     task(CreationDate,   CreationLatitude,   CreationLongitude,   DueDate,   Memo,   RepeatIntervalInDays,   TaskLength,   UserId)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) `,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
 		t.CreationDate, t.CreationLatitude, t.CreationLongitude, t.DueDate, t.Memo, t.RepeatIntervalInDays, t.TaskLength, t.UserID)
 	if err != nil {
 		panic(err)
 	}
-	t.ID, _ = result.LastInsertId()
-	fmt.Println("createTask: ", t.toString())
+	t.ID, err = result.LastInsertId()
+	fmt.Println(err)
+	fmt.Println("What's the fucking ID then? ", t.ID)
+	return nil
 }
 
 func (t *Task) toString() string {

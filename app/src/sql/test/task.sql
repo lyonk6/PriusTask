@@ -33,3 +33,8 @@ VALUES
 (156396319496,                0,                 0,1563963191000,  'Check the Time'       ,                    0,     900000,      0),
 (156396319587,                0,                 0, 517678260000,  'Start Life'           ,                    0,     900000,      0),
 (156396319678,                0,                 0, 946684800000,  'Survive y2k'          ,                    0,     900000,      0) RETURNING ID;
+
+
+INSERT INTO task(CreationDate, CreationLatitude, CreationLongitude,      DueDate,  Memo                   , RepeatIntervalInDays, TaskLength, UserId)
+VALUES
+(156396319678,                0,                 0, 946684800000,  'Return an id'         ,                    0,     900000,      0) RETURNING id;

@@ -78,8 +78,8 @@ func RegisterRoutes() {
 	http.HandleFunc("/PostTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
 		//fmt.Println("PostTask- Body: ", t.toString())
-		createTask(t)
-	})//*/
+		createTask(&t)
+	}) //*/
 
 	//All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
