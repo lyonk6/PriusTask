@@ -21,37 +21,57 @@ type TaskTouch struct {
 	TouchType         string  `json:"touchType"`
 }
 
-// Save a tasktouch to the database and give this taskTouch an ID.
+/**
+ * Save a tasktouch to the database. Use the returned ID from the database
+ * to give this tasktouch an ID.
+ */
 func saveTaskTouch(tt *TaskTouch) error {
 	fmt.Println("saveTaskTouch: ", tt.toString())
+	// TODO implement validation that the tt has a valid TouchType, UserID and TaskID.
+
 	err := db.QueryRow(`
         INSERT INTO tasktouch(UserID, TaskID, TouchTimeStamp, LocationTimeStamp, Longitude, Latitude, Accuracy, NetworkType, TouchType)
-	    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
+	    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
 		tt.UserID, tt.TaskID, tt.TouchTimeStamp, tt.LocationTimeStamp, tt.Longitude, tt.Latitude, tt.Accuracy, tt.NetworkType, tt.TouchType).Scan(&tt.ID)
 	return err
 }
 
+/**
+ * Save a new TaskTouch object and update a task according to how it was
+ * modified. If a task is marked "COMPLETED" check and see if the task
+ * repeats. If the task does repeat, mark the task as "UPDATED" and update
+ * the new DueDate.
+ *
+ * All other updates should just modify the task.LastTouchType field.
+ * Deleted tasks should not be removed yet.
+ */
 func postTaskTouch(tt *TaskTouch) error {
 	var err error
 	var task Task
-	saveTaskTouch(tt)
+	err = saveTaskTouch(tt)
+	if err != nil {
+		return err
+	}
+	// First find the impacted task:
+	err = db.QueryRow(`SELECT id, duedate, repeatintervalindays FROM task where id=$1`, tt.UserID).
+		Scan(&task.ID, &task.DueDate, &task.RepeatIntervalInDays)
+	if err != nil {
+		return err
+	}
 
-	// First check and see if the touch type is "COMPLETED"
-	if tt.TouchType == "COMPLETED" {
-		// Fetch the coresponding task that has been completed:
-		err = db.QueryRow(`SELECT id, duedate, repeatintervalindays FROM task where id=$1`, tt.UserID).
-			Scan(&task.ID, &task.DueDate, &task.RepeatIntervalInDays)
+	// Next see if we have a completed task that repeats.
+	if tt.TouchType == "COMPLETED" && task.RepeatIntervalInDays > 0 {
 
-			// If the reapeat interval is > 0 then set a new dueDate and save the task as "UPDATED"
-		if task.RepeatIntervalInDays > 0 && err == nil {
-			_, err = db.Exec(`UPDATE task SET DueDate='$1', LastTouchType ='$2' WHERE id='$3'`,
-				task.DueDate+task.RepeatIntervalInDays*86400000, "UPDATED", tt.ID)
-		}
+		// If so, set a new dueDate and save the task as "UPDATED"
+		_, err = db.Exec(`UPDATE task SET DueDate='$1', LastTouchType ='$2' WHERE id='$3'`,
+			task.DueDate+task.RepeatIntervalInDays*86400000, "UPDATED", tt.ID)
+
 		// Otherwise, set the new update type.
-	} else if err == nil {
+	} else {
 		_, err = db.Exec(`UPDATE task SET lasttouchtype='$1' WHERE id='$2'`, tt.TouchType, tt.ID)
 	}
-	fmt.Println("postTaskTouch: ", tt.toString(), touchTypes[0])
+
+	// Finally, return our error if we have one.
 	return err
 }
 

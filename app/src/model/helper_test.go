@@ -52,6 +52,7 @@ func getTestURL() (databaseURL string) {
  */
 func checkError(err error) {
 	if err != nil {
+		fmt.Println("Unexpected error encountered while testing.")
 		panic(err)
 	}
 }

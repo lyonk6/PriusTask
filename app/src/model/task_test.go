@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -17,13 +16,7 @@ func TestGetTaskList(t *testing.T) {
 	tt.ID = 1
 
 	tl, err := getTaskList(tt)
-
-	fmt.Println("No unhandled exceptions in getTaskList")
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("No handled exceptions in getTaskList")
-	}
+	checkError(err)
 
 	for i := range tl {
 		//fmt.Println(i, ". ", v)
@@ -43,15 +36,12 @@ func TestCreateTask(t *testing.T) {
 	task.Memo = "This is the story of a girl"
 	// First add a new task to the database and check the error.
 	err := createTask(&task)
-	if err != nil {
-		panic(err)
-	}
+	checkError(err)
+
 	// Then delete the task.
 	statement := `DELETE FROM task WHERE id='` + strconv.FormatInt(task.ID, 10) + `'`
 	_, err = db.Exec(statement)
-	if err != nil {
-		panic(err)
-	}
+	checkError(err)
 }
 
 /**
