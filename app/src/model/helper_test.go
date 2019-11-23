@@ -2,8 +2,10 @@ package model
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
 	"strings"
+	"testing"
 
 	_ "github.com/lib/pq" //driver for postgres
 )
@@ -41,6 +43,26 @@ func getTestURL() (databaseURL string) {
 	} else {
 		panic("Malformed params file. database identifier 'testdb=' and database url expected.")
 	}
-
 	return databaseURL
+}
+
+/**
+ * Used by test files to validate no errors are returned from calls
+ * made to the database.
+ */
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Test the toString method for tasks and tasktouch objects.
+func TestToString(t *testing.T) {
+	task := Task{}
+	task.Memo = "Here is a task."
+	fmt.Println(task.toString())
+
+	tasktouch := TaskTouch{}
+	tasktouch.TouchType = "CREATED"
+	fmt.Println(tasktouch.toString())
 }

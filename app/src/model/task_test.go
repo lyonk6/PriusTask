@@ -112,16 +112,3 @@ func TestUpdateTask(t *testing.T) {
 	err = updateTask(&original)
 	checkError(err)
 }
-
-// Test the toString method for tasks.
-func TestToString(t *testing.T) {
-	task := Task{}
-	task.Memo = "Here is a task."
-	fmt.Println(task.toString())
-}
-
-func checkError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
