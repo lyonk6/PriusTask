@@ -56,14 +56,14 @@ func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		tt := decodeTaskTouch(r)
 		//fmt.Print("PostTaskTouch- time:", tt.toString())
-		postTaskTouch(tt)
+		postTaskTouch(&tt)
 	})
 
 	//Receive and save a TaskTouch object. Call getTaskList, to get a list of suggested tasks.
 	http.HandleFunc("/GetTasks", func(w http.ResponseWriter, r *http.Request) {
 		tt := decodeTaskTouch(r)
 		//fmt.Println("GetTasks- Body: ", tt.toString())
-		saveTaskTouch(tt)
+		saveTaskTouch(&tt)
 		getTaskList(tt)
 	})
 
@@ -71,7 +71,7 @@ func RegisterRoutes() {
 	http.HandleFunc("/PutTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
 		//fmt.Println("PutTask- Body: ", t.toString())
-		updateTask(t)
+		updateTask(&t)
 	})
 
 	//Call creatTask in task.go to add a task to the database.

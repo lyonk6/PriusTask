@@ -22,11 +22,11 @@ type TaskTouch struct {
 }
 
 //TODO Save this task touch and an instance of a task to an S3 bucket or some other DB.
-func saveTaskTouch(tt TaskTouch) {
+func saveTaskTouch(tt *TaskTouch) {
 	fmt.Println("saveTaskTouch: ", tt.toString())
 }
 
-func postTaskTouch(tt TaskTouch) {
+func postTaskTouch(tt *TaskTouch) {
 	saveTaskTouch(tt)
 	switch tt.TouchType {
 	case "DELETED":
