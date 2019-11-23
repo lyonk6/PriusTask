@@ -12,6 +12,12 @@ import (
 	_ "github.com/lib/pq" //driver for postgres
 )
 
+/**
+ * Call getParameters() to retrieve the portNumber and database url. Then,
+ * use connectToDatabase() to establish a connection and pass that dependency
+ * the model. Then register our http request routes anf finally listen and
+ * serve these requests.
+ */
 func main() {
 	portNumber, url := getParameters()
 	connectToDatabase(url)
@@ -19,6 +25,9 @@ func main() {
 	http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
 }
 
+/**
+ * Connect to a database and set it for the model to use.
+ */
 func connectToDatabase(url string) {
 	db, err := sql.Open("postgres", url)
 	if err != nil {
