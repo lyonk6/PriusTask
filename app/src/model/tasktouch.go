@@ -30,9 +30,11 @@ func postTaskTouch(tt *TaskTouch) {
 	saveTaskTouch(tt)
 	switch tt.TouchType {
 	case "DELETED":
-		//TODO Delete a task from the Database.
+		//TODO mark a task as DELETED
+
 	case "COMPLETED":
-		//TODO Mark a task as completed --
+
+		//TODO Mark a task as COMPLETED --
 		//  Update the due date (due date + repeatIntervalInDays)
 		//  Delete the task if it is not meant to repeat.
 	}

@@ -64,8 +64,12 @@ func TestUpdateTask(t *testing.T) {
 	//fmt.Println("Fetch an arbitrary task and call it 'task' ...")
 	task := &Task{}
 	var original Task
-	stmt := `SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude from task`
-	err := db.QueryRow(stmt+` limit 1`).Scan(&task.ID, &task.UserID, &task.Memo, &task.RepeatIntervalInDays, &task.TaskLength, &task.DueDate, &task.CreationDate, &task.CreationLongitude, &task.CreationLatitude)
+	stmt := `SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype from task`
+	err := db.QueryRow(stmt+` limit 1`).
+		Scan(&task.ID, &task.UserID, &task.Memo,
+			&task.RepeatIntervalInDays, &task.TaskLength,
+			&task.DueDate, &task.CreationDate, &task.CreationLongitude,
+			&task.CreationLatitude, &task.LastTouchType)
 	checkError(err)
 
 	//fmt.Println("Then make a copy of it and call it 'original'...")
@@ -78,7 +82,7 @@ func TestUpdateTask(t *testing.T) {
 	task.RepeatIntervalInDays = 29
 	task.TaskLength = 3600001 // 1 hour in ms
 	task.DueDate = rand.Int63()
-
+	task.LastTouchType = "START_UP"
 	// Now add it to a database ...
 	//fmt.Println(`Mutate "task" then making an update to the db ...`)
 	err = updateTask(task)
@@ -89,7 +93,11 @@ func TestUpdateTask(t *testing.T) {
 	// Fetch the same task from the database and confirm it has been updated.
 	//fmt.Println(`Fetch the task again. This time call it 'updated' ...`)
 	updated := &Task{}
-	err = db.QueryRow(stmt+` WHERE id=$1`, task.ID).Scan(&updated.ID, &updated.UserID, &updated.Memo, &updated.RepeatIntervalInDays, &updated.TaskLength, &updated.DueDate, &updated.CreationDate, &updated.CreationLongitude, &updated.CreationLatitude)
+	err = db.QueryRow(stmt+` WHERE id=$1`, task.ID).
+		Scan(&updated.ID, &updated.UserID, &updated.Memo,
+			&updated.RepeatIntervalInDays, &updated.TaskLength,
+			&updated.DueDate, &updated.CreationDate, &updated.CreationLongitude,
+			&updated.CreationLatitude, &updated.LastTouchType)
 	checkError(err)
 
 	//fmt.Println(`Finally verify the 'updated' task is the same as 'task'`)

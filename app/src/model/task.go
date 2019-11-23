@@ -11,11 +11,12 @@ type Task struct {
 	CreationDate         int64  `json:"creationDate"`
 	CreationLongitude    int64  `json:"creationLongitude"`
 	CreationLatitude     int64  `json:"creationLatitude"`
+	LastTouchType        string `json:"lastTouchType"`
 }
 
 //Return a list of tasks ordered by due date.
 func getTaskList(tt TaskTouch) ([20]Task, error) {
-	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude FROM task ORDER BY DueDate ASC LIMIT 20;`)
+	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task ORDER BY DueDate ASC LIMIT 20;`)
 
 	var tasks [20]Task
 	t := &Task{}
@@ -29,7 +30,7 @@ func getTaskList(tt TaskTouch) ([20]Task, error) {
 	//fmt.Println(rows.Columns())
 
 	for rows.Next() {
-		err = rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude)
+		err = rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude, &t.LastTouchType)
 
 		if err != nil {
 			return tasks, err
@@ -49,9 +50,10 @@ func updateTask(t *Task) error {
 	SET memo             = $1,
 	RepeatIntervalInDays = $2,
 	TaskLength           = $3,
-	DueDate              = $4
-  WHERE id = $5`,
-		t.Memo, t.RepeatIntervalInDays, t.TaskLength, t.DueDate, t.ID)
+	DueDate              = $4,
+  LastTouchType        = $5
+  WHERE id = $6`,
+		t.Memo, t.RepeatIntervalInDays, t.TaskLength, t.DueDate, t.LastTouchType, t.ID)
 	return err
 }
 
@@ -59,9 +61,9 @@ func updateTask(t *Task) error {
 func createTask(t *Task) error {
 	err := db.QueryRow(`
     INSERT INTO
-    task(CreationDate,   CreationLatitude,   CreationLongitude,   DueDate,   Memo,   RepeatIntervalInDays,   TaskLength,   UserId)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-		t.CreationDate, t.CreationLatitude, t.CreationLongitude, t.DueDate, t.Memo, t.RepeatIntervalInDays, t.TaskLength, t.UserID).Scan(&t.ID)
+    task(CreationDate,   CreationLatitude,   CreationLongitude,   DueDate,   Memo,   RepeatIntervalInDays,   TaskLength, LastTouchType, UserId)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+		t.CreationDate, t.CreationLatitude, t.CreationLongitude, t.DueDate, t.Memo, t.RepeatIntervalInDays, t.TaskLength, t.LastTouchType, t.UserID).Scan(&t.ID)
 	return err
 }
 
