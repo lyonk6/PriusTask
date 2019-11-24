@@ -28,6 +28,7 @@ type TaskTouch struct {
 func saveTaskTouch(tt *TaskTouch) error {
 	fmt.Println("saveTaskTouch: ", tt.toString())
 	// TODO implement validation that the tt has a valid TouchType, UserID and TaskID.
+	// TODO also save an instance of this task with the task touch.
 
 	err := db.QueryRow(`
         INSERT INTO tasktouch(UserID, TaskID, TouchTimeStamp, LocationTimeStamp, Longitude, Latitude, Accuracy, NetworkType, TouchType)
