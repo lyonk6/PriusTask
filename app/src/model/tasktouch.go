@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -26,7 +25,7 @@ type TaskTouch struct {
  * to give this tasktouch an ID.
  */
 func saveTaskTouch(tt *TaskTouch) error {
-	fmt.Println("saveTaskTouch: ", tt.toString())
+	// fmt.Println("saveTaskTouch: ", tt.toString())
 	// TODO implement validation that the tt has a valid TouchType, UserID and TaskID.
 	// TODO also save an instance of this task with the task touch.
 
@@ -54,24 +53,20 @@ func postTaskTouch(tt *TaskTouch) error {
 		return err
 	}
 	// First find the impacted task:
-	err = db.QueryRow(`SELECT id, duedate, repeatintervalindays FROM task where id=$1`, tt.UserID).
+	err = db.QueryRow(`SELECT id, duedate, repeatintervalindays FROM task WHERE id=$1`, tt.TaskID).
 		Scan(&task.ID, &task.DueDate, &task.RepeatIntervalInDays)
 	if err != nil {
 		return err
 	}
-
 	// Next see if we have a completed task that repeats.
 	if tt.TouchType == "COMPLETED" && task.RepeatIntervalInDays > 0 {
-
 		// If so, set a new dueDate and save the task as "UPDATED"
-		_, err = db.Exec(`UPDATE task SET DueDate='$1', LastTouchType ='$2' WHERE id='$3'`,
+		_, err = db.Exec(`UPDATE task SET DueDate=$1, LastTouchType =$2 WHERE id=$3`,
 			task.DueDate+task.RepeatIntervalInDays*86400000, "UPDATED", tt.ID)
-
 		// Otherwise, set the new update type.
 	} else {
-		_, err = db.Exec(`UPDATE task SET lasttouchtype='$1' WHERE id='$2'`, tt.TouchType, tt.ID)
+		_, err = db.Exec(`UPDATE task SET lasttouchtype=$1 WHERE id=$2`, tt.TouchType, tt.ID)
 	}
-
 	// Finally, return our error if we have one.
 	return err
 }
