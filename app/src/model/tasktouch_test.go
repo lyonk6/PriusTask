@@ -23,11 +23,11 @@ func TestSaveTaskTouch(t *testing.T) {
 
 	err := saveTaskTouch(tasktouch)
 	checkError(err)
-	fmt.Println("TaskTouch saved. Returned ID=" + strconv.FormatInt(tasktouch.ID, 10))
+	fmt.Println("TaskTouch saved. Returned ID=" + strconv.FormatInt(int64(tasktouch.ID), 10))
 
 	// Then delete the tasktouch.
 	fmt.Println("Now clean up the database by removing the recently created TaskTouch. ")
-	statement := `DELETE FROM tasktouch WHERE id='` + strconv.FormatInt(tasktouch.ID, 10) + `'`
+	statement := `DELETE FROM tasktouch WHERE id='` + strconv.FormatInt(int64(tasktouch.ID), 10) + `'`
 	_, err = db.Exec(statement)
 	checkError(err) //*/
 }

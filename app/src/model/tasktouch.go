@@ -8,9 +8,9 @@ var touchTypes = []string{"UPDATED", "DELETED", "COMPLETED", "DISMISSED", "START
 
 //TaskTouch is an instance of a user updating or interacting with a Task.
 type TaskTouch struct {
-	ID                int64   `json:"id"`
-	UserID            int64   `json:"userId"`
-	TaskID            int64   `json:"taskId"`
+	ID                int32   `json:"id"`
+	UserID            int32   `json:"userId"`
+	TaskID            int32   `json:"taskId"`
 	TouchTimeStamp    int64   `json:"touchTimeStamp"`
 	LocationTimeStamp int64   `json:"locationTimeStamp"`
 	Longitude         float64 `json:"longitude"`
