@@ -28,7 +28,6 @@ func getTaskList(tt TaskTouch) ([20]Task, error) {
 
 	//fmt.Print("Here are the columns: ")
 	//fmt.Println(rows.Columns())
-
 	for rows.Next() {
 		err = rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude, &t.LastTouchType)
 

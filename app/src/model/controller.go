@@ -55,31 +55,26 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		tt := decodeTaskTouch(r)
-		//fmt.Print("PostTaskTouch- time:", tt.toString())
+		fmt.Print("PostTaskTouch- time:", tt.toString())
 		postTaskTouch(&tt)
-	})
-
-	//Receive and save a TaskTouch object. Call getTaskList, to get a list of suggested tasks.
-	http.HandleFunc("/GetTasks", func(w http.ResponseWriter, r *http.Request) {
-		tt := decodeTaskTouch(r)
-		//fmt.Println("GetTasks- Body: ", tt.toString())
-		saveTaskTouch(&tt)
 		getTaskList(tt)
 	})
 
 	// Call updateTask in task.go to update a task in the database.
 	http.HandleFunc("/PutTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
-		//fmt.Println("PutTask- Body: ", t.toString())
-		updateTask(&t)
+		fmt.Println("PutTask- Body: ", t.toString())
+		err := updateTask(&t)
+		clearError(err)
 	})
 
 	//Call creatTask in task.go to add a task to the database.
 	http.HandleFunc("/PostTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
-		//fmt.Println("PostTask- Body: ", t.toString())
-		createTask(&t)
-	}) //*/
+		fmt.Println("PostTask- Body: ", t.toString())
+		err := createTask(&t)
+		clearError(err)
+	})
 
 	//All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -102,4 +97,9 @@ func dumpRequest(w http.ResponseWriter, r *http.Request) {
 		//fmt.Fprint(w, string(requestDump))
 		fmt.Println(string(requestDump))
 	}
+}
+
+func clearError(err error) {
+	fmt.Println("\nAn error has been encountered:")
+	fmt.Print(err)
 }
