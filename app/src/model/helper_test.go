@@ -46,17 +46,6 @@ func getTestURL() (databaseURL string) {
 	return databaseURL
 }
 
-/**
- * Used by test files to validate no errors are returned from calls
- * made to the database.
- */
-func checkError(err error) {
-	if err != nil {
-		fmt.Println("Unexpected error encountered while testing.")
-		panic(err)
-	}
-}
-
 // Test the toString method for tasks and tasktouch objects.
 func TestToString(t *testing.T) {
 	task := Task{}

@@ -15,10 +15,11 @@ type Task struct {
 }
 
 //Return a list of tasks ordered by due date.
-func getTaskList(tt TaskTouch) ([20]Task, error) {
+func getTaskList(tt TaskTouch) ([]Task, error) {
 	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task ORDER BY DueDate ASC LIMIT 20;`)
 
-	var tasks [20]Task
+	//var tasks [20]Task
+	tasks := make([]Task, 20)
 	t := &Task{}
 	i := 0
 

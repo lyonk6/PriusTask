@@ -47,17 +47,26 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
 	} else {
 		return tt
 	}
-}
+} //*/
 
 /*RegisterRoutes registers api method calls. Valid method calls include:
  *PostTaskTouch, GetTasks, PutTask & PostTask.
  */
 func RegisterRoutes() {
+	// TODO Decide when a TaskList really needs to be updated.
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		tt := decodeTaskTouch(r)
 		fmt.Print("PostTaskTouch- time:", tt.toString())
-		postTaskTouch(&tt)
-		getTaskList(tt)
+		var tl *[]Task
+
+		err := postTaskTouch(&tt)
+		checkError(err)
+
+		*tl, err = getTaskList(tt)
+		checkError(err)
+
+		encodeTaskList(w, tl)
+		w.Write([]byte("200 Success"))
 	})
 
 	// Call updateTask in task.go to update a task in the database.
@@ -65,7 +74,9 @@ func RegisterRoutes() {
 		t := decodeTask(r)
 		fmt.Println("PutTask- Body: ", t.toString())
 		err := updateTask(&t)
-		clearError(err)
+		checkError(err)
+
+		w.Write([]byte("200 Success"))
 	})
 
 	//Call creatTask in task.go to add a task to the database.
@@ -73,8 +84,10 @@ func RegisterRoutes() {
 		t := decodeTask(r)
 		fmt.Println("PostTask- Body: ", t.toString())
 		err := createTask(&t)
-		clearError(err)
-	})
+		checkError(err)
+
+		w.Write([]byte("200 Success"))
+	}) //*/
 
 	//All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -99,7 +112,11 @@ func dumpRequest(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func clearError(err error) {
-	fmt.Println("\nAn error has been encountered:")
-	fmt.Print(err)
+/**
+ * Used by tests and prod to validate no errors are returned from a function call.
+ */
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
