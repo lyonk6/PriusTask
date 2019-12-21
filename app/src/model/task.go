@@ -68,5 +68,5 @@ func createTask(t *Task) error {
 }
 
 func (t *Task) toString() string {
-	return t.Memo
+	return t.LastTouchType + ", " + t.Memo
 }

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -19,8 +18,8 @@ func TestGetTaskList(t *testing.T) {
 	tl, err := getTaskList(tt)
 	checkError(err)
 
-	for i, v := range tl {
-		fmt.Println(i, ". ", v)
+	for i := range tl {
+		//fmt.Println(i, ". ", v)
 		//fmt.Println("Here is a due date: ", tl[i])
 		if i > 0 && tl[i].DueDate < tl[i-1].DueDate && tl[i].ID != 0 {
 			panic("Tasks not sorted by due date!")

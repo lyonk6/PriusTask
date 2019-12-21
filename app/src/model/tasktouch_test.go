@@ -60,13 +60,13 @@ func TestPostTaskTouch(t *testing.T) {
 	tasktouch.TaskID = task.ID
 	tasktouch.TouchType = task.LastTouchType
 	err := postTaskTouch(&tasktouch)
-	checkError(err)
-	fmt.Println("Here is the original task: ")
-	fmt.Println("The TaskID is:              ", task.DueDate)
-	fmt.Println("The Task ID is:             ", task.DueDate)
-	fmt.Println("The DueDate is:             ", task.DueDate)
-	fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-	fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)
+	checkError(err) /*
+		fmt.Println("Here is the original task: ")
+		fmt.Println("The TaskID is:              ", task.DueDate)
+		fmt.Println("The Task ID is:             ", task.DueDate)
+		fmt.Println("The DueDate is:             ", task.DueDate)
+		fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
+		fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)//*/
 
 	//Now Mark the Task and it's partner TaskTouch as completed.
 
@@ -79,9 +79,9 @@ func TestPostTaskTouch(t *testing.T) {
 	stmt := `SELECT id, repeatintervalindays, duedate, lasttouchtype from task`
 	err = db.QueryRow(stmt+` limit 1`).
 		Scan(&task.ID, &task.RepeatIntervalInDays, &task.DueDate, &task.LastTouchType)
-	checkError(err)
-	fmt.Println("The DueDate is:             ", task.DueDate)
-	fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
-	fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-	fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)
+	checkError(err) /*
+		fmt.Println("The DueDate is:             ", task.DueDate)
+		fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
+		fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
+		fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)//*/
 }
