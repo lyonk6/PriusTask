@@ -1,5 +1,7 @@
 package model
 
+import "strconv"
+
 // Task is an Object for holding a task.
 type Task struct {
 	ID                   int32  `json:"id"`
@@ -68,5 +70,5 @@ func createTask(t *Task) error {
 }
 
 func (t *Task) toString() string {
-	return t.LastTouchType + ", " + t.Memo
+	return "ID: " + strconv.Itoa(int(t.ID)) + ", LastTouchType: " + t.LastTouchType + ", Memo:" + t.Memo
 }
