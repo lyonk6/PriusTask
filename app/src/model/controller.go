@@ -17,7 +17,8 @@ func encodeTask(w http.ResponseWriter, t *Task) {
 	}
 }
 
-func encodeTaskList(w http.ResponseWriter, tl *[]Task) {
+//Slices have a pointer already so don't pass by reference.
+func encodeTaskList(w http.ResponseWriter, tl []Task) {
 	enc := json.NewEncoder(w)
 	err := enc.Encode(tl)
 	if err != nil {
@@ -55,17 +56,23 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
 func RegisterRoutes() {
 	// TODO Decide when a TaskList really needs to be updated.
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
+		//fmt.Println("\nRequest: PostTaskTouch- time:", tt.toString())
+		fmt.Println("\nCheck 1")
 		tt := decodeTaskTouch(r)
-		fmt.Println("\nRequest: PostTaskTouch- time:", tt.toString())
-		/*
-			var tl *[]Task
-			err := postTaskTouch(&tt)
-			checkError(err)
-			*tl, err = getTaskList(tt)
-			checkError(err)
-			encodeTaskList(w, tl)
-			//*/
-
+		fmt.Println("Check 2: task touch decoded:", tt.toString())
+		var tl []Task
+		fmt.Println("Check 3: call postTaskTouch.")
+		err := postTaskTouch(&tt)
+		fmt.Println("Check 4: Check for errors")
+		checkError(err)
+		fmt.Println("Check 5: No errors in post task touch. now fetch tasklists.")
+		tl, err = getTaskList(tt) // Here is an error. :(
+		fmt.Println("Check 6: Check for errors in getTaskList")
+		checkError(err)
+		fmt.Println("Check 7: No errors. Finally encode the tasks.")
+		encodeTaskList(w, tl)
+		fmt.Println("Check 8: Done")
+		//*/
 		//w.Write([]byte("200 Success"))
 		w.Write([]byte("[]")) //*/
 	})

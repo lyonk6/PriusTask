@@ -1,6 +1,9 @@
 package model
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 // Task is an Object for holding a task.
 type Task struct {
@@ -18,14 +21,15 @@ type Task struct {
 
 //Return a list of tasks ordered by due date.
 func getTaskList(tt TaskTouch) ([]Task, error) {
-	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task ORDER BY DueDate ASC LIMIT 20;`)
+	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task ORDER BY DueDate ASC LIMIT 10;`)
 
 	//var tasks [20]Task
-	tasks := make([]Task, 20)
+	tasks := make([]Task, 10)
 	t := &Task{}
 	i := 0
 
 	if err != nil {
+		fmt.Println("There was an error the the getTaskList query...")
 		return tasks, err
 	}
 
@@ -35,6 +39,7 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 		err = rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude, &t.LastTouchType)
 
 		if err != nil {
+			fmt.Println("There was an error. Task could not be parsed from query.")
 			return tasks, err
 		}
 
