@@ -1,10 +1,21 @@
 # PriusTask
 ---
-# Design:
-controller:
-    - main.go
-model:
-    - task.go
-    - taskTouch.go
-    - user.go
-    - db.go
+Dependencies: 
+
+  1. Golang: version 1.11
+
+  2. Postgres for go package: https://github.com/lib/pq 
+
+  3. PostgreSQL 11.5
+
+
+# Parameter File
+The parameter file specifies configuration setting such as the host port, production database and test database. Use "port=", "db=" and "testdb=" to specify the port, database and test database.
+
+```
+port=
+db=
+testdb=
+```
+
+See also example_paramete_file
