@@ -54,7 +54,6 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
  *PostTaskTouch, GetTasks, PutTask & PostTask.
  */
 func RegisterRoutes() {
-	// TODO Decide when a TaskList really needs to be updated.
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("\nRequest: PostTaskTouch- time:", tt.toString())
 		fmt.Println("\nCheck 1")
@@ -72,9 +71,8 @@ func RegisterRoutes() {
 		fmt.Println("Check 7: No errors. Finally encode the tasks.")
 		encodeTaskList(w, tl)
 		fmt.Println("Check 8: Done")
-		//*/
-		//w.Write([]byte("200 Success"))
-		w.Write([]byte("[]")) //*/
+
+		//w.Write([]byte("[]")) //*/
 	})
 
 	// Call updateTask in task.go to update a task in the database.
