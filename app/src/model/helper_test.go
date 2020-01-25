@@ -56,3 +56,9 @@ func TestToString(t *testing.T) {
 	tasktouch.TouchType = "CREATED"
 	fmt.Println(tasktouch.toString())
 }
+
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

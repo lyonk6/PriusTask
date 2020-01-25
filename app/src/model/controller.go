@@ -56,22 +56,23 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("\nRequest: PostTaskTouch- time:", tt.toString())
-		fmt.Println("\nCheck 1")
+		//fmt.Println("\nCheck 1")
 		tt := decodeTaskTouch(r)
-		fmt.Println("Check 2: task touch decoded:", tt.toString())
+		//fmt.Println("Check 2: task touch decoded:", tt.toString())
 		var tl []Task
-		fmt.Println("Check 3: call postTaskTouch.")
+		//fmt.Println("Check 3: call postTaskTouch.")
 		err := postTaskTouch(&tt)
-		fmt.Println("Check 4: Check for errors")
-		checkError(err)
-		fmt.Println("Check 5: No errors in post task touch. now fetch tasklists.")
+		//fmt.Println("Check 4: Check for errors")
+		printError(err)
+		//fmt.Println("Check 5: No errors in post task touch. now fetch tasklists.")
 		tl, err = getTaskList(tt) // Here is an error. :(
-		fmt.Println("Check 6: Check for errors in getTaskList")
-		checkError(err)
-		fmt.Println("Check 7: No errors. Finally encode the tasks.")
+		//fmt.Println("Check 6: Check for errors in getTaskList")
+		printError(err)
+		//fmt.Println("Check 7: No errors. Finally encode the tasks.")
 		encodeTaskList(w, tl)
-		fmt.Println("Check 8: Done")
+		//fmt.Println("Check 8: Done")
 
+		fmt.Println("Checks 1-8: Done. Request was: PostTaskTouch- time:", tt.toString())
 		//w.Write([]byte("[]")) //*/
 	})
 
@@ -80,7 +81,7 @@ func RegisterRoutes() {
 		t := decodeTask(r)
 		fmt.Println("PutTask- Body: ", t.toString())
 		err := updateTask(&t)
-		checkError(err)
+		printError(err)
 		w.Write([]byte("{}"))
 	}) //*/
 
@@ -89,7 +90,7 @@ func RegisterRoutes() {
 		t := decodeTask(r)
 		fmt.Println("\nRequest: PostTask- Body: ", t.toString())
 		err := createTask(&t)
-		checkError(err)
+		printError(err)
 		encodeTask(w, &t)
 		fmt.Println("Here is the task we are returning: " + t.toString())
 		//w.Write([]byte("200 Success"))
@@ -121,8 +122,8 @@ func dumpRequest(w http.ResponseWriter, r *http.Request) {
 /**
  * Used by tests and prod to validate no errors are returned from a function call.
  */
-func checkError(err error) {
+func printError(err error) {
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }

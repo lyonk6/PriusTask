@@ -31,13 +31,13 @@ func main() {
 func connectToDatabase(url string) {
 	db, err := sql.Open("postgres", url)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	model.SetDatabase(db)
 }
 
 /**
- * Get the desired port numer and database url from a private paramerters
+ * Get the desired port number and database url from a private paramerters
  * file. Return the port number and the databaseUrl as a string.
  */
 func getParameters() (portNumber, databaseURL string) {

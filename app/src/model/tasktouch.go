@@ -52,6 +52,7 @@ func postTaskTouch(tt *TaskTouch) error {
 	err = saveTaskTouch(tt)
 	fmt.Println("Check 3.2: Save TaskTouch")
 	if err != nil {
+		fmt.Println("Error returned when saving task touch.")
 		return err
 	}
 	/* PostTaskTouch does not make a query if the touch type is
@@ -59,7 +60,7 @@ func postTaskTouch(tt *TaskTouch) error {
 	 */
 	if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" ||
 		tt.TouchType == "DELETED" || tt.TouchType == "UPDATED" {
-		touchTask(tt)
+		err = touchTask(tt)
 	}
 	return err
 }
