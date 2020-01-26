@@ -72,7 +72,7 @@ func RegisterRoutes() {
 		encodeTaskList(w, tl)
 		//fmt.Println("Check 8: Done")
 
-		fmt.Println("Checks 1-8: Done. Request was: PostTaskTouch- time:", tt.toString())
+		fmt.Print("Checks 1-8: Done. Request was: PostTaskTouch- time:", tt.toString(), "\n\n")
 		//w.Write([]byte("[]")) //*/
 	})
 

@@ -32,6 +32,25 @@ func TestSaveTaskTouch(t *testing.T) {
 	checkError(err) //*/
 }
 
+func TestTouchTask(t *testing.T) {
+	// func touchTask(tt *TaskTouch) error
+	//First pick 5 tasks and set them to CREATED
+	a := [5]int32{1, 2, 3, 4, 5}
+
+	for i, v := range a {
+		fmt.Println(i, " ", v)
+		tt := TaskTouch{}
+		tt.TaskID = v
+		tt.TouchType = "CREATED"
+		//TODO Loop though the local test database and mark all of these
+		// tasks as deleted using the touchTask method.
+		touchTask(&tt)
+	}
+
+	// TODO Refactor tests from TestPostTaskTouch here.
+
+}
+
 /**
  * 1. Create a Task and put it in the Task database. Set it's LastTouchType to
  * "CREATED".
