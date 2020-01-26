@@ -69,38 +69,59 @@ func TestPostTaskTouch(t *testing.T) {
 	fmt.Println("TestPostTaskTouch")
 	task := Task{}
 	tasktouch := TaskTouch{}
-	//Create a task and put it in the database:
+	//First create a dummy task and put it in the database. Give it a repeat interval.
 	task.Memo = "This is a 'test' task!"
 	task.LastTouchType = "CREATED"
 	task.RepeatIntervalInDays = 7
-	createTask(&task)
+	err := createTask(&task)
+	checkError(err)
 
-	//Create a TaskTouch for the task above:
+	startingTime := task.DueDate
+	deltaTime := task.RepeatIntervalInDays * 24 * 60 * 60 * 1000
+
+	//Create an appropriate task touch that does not modify the task.
+	// Then call PostTaskTouch to post it.
 	tasktouch.TaskID = task.ID
-	tasktouch.TouchType = task.LastTouchType
-	err := postTaskTouch(&tasktouch)
-	checkError(err) /*
-		fmt.Println("Here is the original task: ")
-		fmt.Println("The TaskID is:              ", task.DueDate)
-		fmt.Println("The Task ID is:             ", task.DueDate)
-		fmt.Println("The DueDate is:             ", task.DueDate)
-		fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-		fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)//*/
+	tasktouch.TouchType = task.LastTouchType // "CREATED"
+	err = postTaskTouch(&tasktouch)
+	checkError(err)
 
-	//Now Mark the Task and it's partner TaskTouch as completed.
-
+	// Update the task type and optionally print what we have so far:
+	fmt.Println("Here is the original task and the new TouchType: ")
 	tasktouch.TouchType = "COMPLETED"
+	fmt.Println("\tThe Task ID is:             ", task.ID)
+	fmt.Println("\tThe DueDate is:             ", task.DueDate)
+	fmt.Println("\tThe RepeatInterval is:      ", task.RepeatIntervalInDays)
+	fmt.Println("\tThe Task LastTouchType is:  ", task.LastTouchType)
+	fmt.Println("\tThe TaskTouch TouchType is: ", tasktouch.TouchType) //*/
+
+	// Now Mark the Task and it's partner TaskTouch as completed. The API should
+	// assign a new due date to this task.
 	err = postTaskTouch(&tasktouch)
 	checkError(err)
 
 	fmt.Println("Here is the updated task: ")
-	// The DueDate on the task should now be 6.048(10)^8
-	stmt := `SELECT id, repeatintervalindays, duedate, lasttouchtype from task`
-	err = db.QueryRow(stmt+` limit 1`).
-		Scan(&task.ID, &task.RepeatIntervalInDays, &task.DueDate, &task.LastTouchType)
-	checkError(err) /*
-		fmt.Println("The DueDate is:             ", task.DueDate)
-		fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
-		fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-		fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType)//*/
+	// The DueDate on the task should now be 6.048(10)^8v (1 week in milliseconds.)
+	stmt := `SELECT repeatintervalindays, duedate, lasttouchtype FROM task WHERE id=$1`
+	err = db.QueryRow(stmt, task.ID).
+		Scan(&task.RepeatIntervalInDays, &task.DueDate, &task.LastTouchType)
+	checkError(err)
+
+	if startingTime+deltaTime != task.DueDate {
+		fmt.Println("Task ID: ", task.ID)
+		fmt.Println("Expected Starting updated DueDate: ", startingTime+deltaTime)
+		fmt.Println("Actual DueDate: ", task.DueDate)
+		panic("Opps. These don't match")
+	}
+
+	fmt.Println("The DueDate is:             ", task.DueDate)
+	fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
+	fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
+	fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType) //*/
+
+	// clean up this test by removing the task in question.
+	_, err = db.Exec(`DELETE FROM task WHERE id=$1`, task.ID)
+	checkError(err)
+	//_, err = db.Exec(`UPDATE task SET lasttouchtype=$1 WHERE id=$2`, tt.TouchType, task.ID)
+
 }

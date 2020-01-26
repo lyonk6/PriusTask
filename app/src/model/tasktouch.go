@@ -47,10 +47,9 @@ func saveTaskTouch(tt *TaskTouch) error {
  * Deleted tasks should not be removed yet.
  */
 func postTaskTouch(tt *TaskTouch) error {
-	fmt.Println("Check 3.1: Here is the task touch: " + tt.toString())
+	//fmt.Println("Check 2 postTaskTouch: Here is the task touch: " + tt.toString())
 	var err error
 	err = saveTaskTouch(tt)
-	fmt.Println("Check 3.2: Save TaskTouch")
 	if err != nil {
 		fmt.Println("Error returned when saving task touch.")
 		return err
@@ -74,39 +73,47 @@ func postTaskTouch(tt *TaskTouch) error {
 func touchTask(tt *TaskTouch) error {
 	var err error
 	var task Task
-	fmt.Println("Check 3.1: Here is the task touch: ", tt.toString())
+	//fmt.Println("Check 3.1: Here is the task touch: ", tt.toString())
 
-	fmt.Println("Check 3.2: Query for task with id=" + strconv.Itoa(int(tt.TaskID)))
+	//fmt.Println("Check 3.2: Query for task with id=" + strconv.Itoa(int(tt.TaskID)))
+	//fmt.Println("Check 3.2: Query for task with id=", tt.TaskID)
 	err = db.QueryRow(`SELECT id, duedate, repeatintervalindays, memo, lasttouchtype FROM task WHERE id=$1`, tt.TaskID).
 		Scan(&task.ID, &task.DueDate, &task.RepeatIntervalInDays, &task.Memo, &task.LastTouchType)
 
-	fmt.Println("Check 3.3: Here is our task: ", task.toString())
+	//fmt.Println("Check 3.3: Here is our task: ", task.toString())
 
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("Check 3.4: Check and see if this is a repeating task: ", task.RepeatIntervalInDays)
+	//fmt.Println("Check 3.4: Check and see if this is a repeating task: ", task.RepeatIntervalInDays)
 	// Next see if we have a completed task that repeats.
 	if tt.TouchType == "COMPLETED" && task.RepeatIntervalInDays > 0 {
 		// If so, set a new dueDate and save the task as "UPDATED"
 
-		fmt.Println("Check 3.5: It is a repeating task and was just completed.")
-		_, err = db.Exec(`UPDATE task SET DueDate=$1, LastTouchType =$2 WHERE id=$3`,
-			task.DueDate+task.RepeatIntervalInDays*86400000, "UPDATED", tt.ID)
+		//fmt.Println("Check 3.5: It is a repeating task and was just completed. Current Due Date: ", task.DueDate)
+		task.DueDate = task.DueDate + (task.RepeatIntervalInDays * 86400000)
+		//fmt.Println("New task DueDate: ", task.DueDate)
+		//fmt.Println(tt.ID)
+		_, err = db.Exec(`UPDATE task SET duedate=$1, lasttouchtype=$2 WHERE id=$3`,
+			task.DueDate, "UPDATED", task.ID)
 		// Otherwise, set the new update type.
 
-		fmt.Println("Check 3.6: Completed task updated.")
+		if err != nil {
+			return err
+		}
+
+		//fmt.Println("Check 3.6: Completed task updated. Updated DueDate: ", task.DueDate)
 	} else {
 
-		fmt.Println("Check 3.5: It is a reapeating task but was not completed.")
+		//fmt.Println("Check 3.5: It is a reapeating task but was not completed.")
 		_, err = db.Exec(`UPDATE task SET lasttouchtype=$1 WHERE id=$2`, tt.TouchType, task.ID)
 
-		fmt.Println("Check 3.6: Non-completed task updated.")
+		//fmt.Println("Check 3.6: Non-completed task updated.")
 	}
 	// Finally, return our error if we have one.
 
-	fmt.Println("Check 3.7: Return error if we have one.")
+	//fmt.Println("Check 3.7: Return error if we have one.")
 	fmt.Println("")
 	return err
 }
