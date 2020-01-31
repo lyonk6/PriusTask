@@ -69,6 +69,10 @@ func RegisterRoutes() {
 		//fmt.Println("Check 6: Check for errors in getTaskList")
 		printError(err)
 		//fmt.Println("Check 7: No errors. Finally encode the tasks.")
+		if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
+			fmt.Println("Only return a TL sometimes.")
+		}
+
 		encodeTaskList(w, tl)
 		//fmt.Println("Check 8: Done")
 
@@ -82,7 +86,8 @@ func RegisterRoutes() {
 		fmt.Println("PutTask- Body: ", t.toString())
 		err := updateTask(&t)
 		printError(err)
-		w.Write([]byte("{}"))
+		encodeTask(w, &t)
+
 	}) //*/
 
 	//Call creatTask in task.go to add a task to the database.

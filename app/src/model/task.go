@@ -75,5 +75,7 @@ func createTask(t *Task) error {
 }
 
 func (t *Task) toString() string {
-	return "ID: " + strconv.Itoa(int(t.ID)) + ", LastTouchType: " + t.LastTouchType + ", Memo:" + t.Memo
+	return "ID: " + strconv.Itoa(int(t.ID)) + ", LastTouchType: " + t.LastTouchType +
+		", Memo:" + t.Memo + ", RepeatInterval: " + strconv.FormatInt(t.RepeatIntervalInDays, 10) +
+		", TaskLength: " + strconv.FormatInt(t.TaskLength, 10)
 }
