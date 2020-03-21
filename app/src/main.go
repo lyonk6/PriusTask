@@ -17,8 +17,8 @@ import (
  * serve these requests.
  */
 func main() {
-	portNumber := os.Args[1]
-	url := os.Args[2]
+	portNumber := os.Getenv("PORT_NUMBER")
+	url := os.Getenv("DB_URL")
 	//portNumber, url := getParameters()
 	connectToDatabase(url)
 	model.RegisterRoutes()
