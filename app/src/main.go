@@ -3,11 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"model"
 	"net/http"
-	"strconv"
-	"strings"
+	"os"
 
 	_ "github.com/lib/pq" //driver for postgres
 )
@@ -19,9 +17,13 @@ import (
  * serve these requests.
  */
 func main() {
-	portNumber, url := getParameters()
+	portNumber := os.Args[1]
+	url := os.Args[2]
+	//portNumber, url := getParameters()
 	connectToDatabase(url)
 	model.RegisterRoutes()
+	fmt.Println("Listening on port ", portNumber)
+	fmt.Println("database URL: ", url)
 	http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
 }
 
@@ -39,7 +41,7 @@ func connectToDatabase(url string) {
 /**
  * Get the desired port number and database url from a private paramerters
  * file. Return the port number and the databaseUrl as a string.
- */
+ *
 func getParameters() (portNumber, databaseURL string) {
 	file, err := ioutil.ReadFile("params")
 
@@ -70,4 +72,4 @@ func getParameters() (portNumber, databaseURL string) {
 	}
 
 	return portNumber, databaseURL
-}
+}//*/

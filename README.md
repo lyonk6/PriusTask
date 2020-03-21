@@ -9,16 +9,11 @@ Dependencies:
   3. PostgreSQL 11.5
 
 
-# Parameter File
-The parameter file specifies configuration setting such as the host port, production database and test database. Use "port=", "db=" and "testdb=" to specify the port, database and test database.
 
+Presently to test one has to have a local test psql database and a test file `test_params` which lists the test database: 
 ```
-port=
-db=
-testdb=
+testdb=postgres://<user>:@localhost/prius_task_test?sslmode=disable
 ```
-
-See also example_paramete_file
 
 Buiding SQL files: 
 ```
