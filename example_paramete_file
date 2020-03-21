@@ -1,3 +1,0 @@
-port=####
-db=dbname=priustask host=###.###.###.### user=##### password=################# port=##### sslmode=require
-testdb=postgres://<user_name>:@localhost/prius_task_test?sslmode=disable
