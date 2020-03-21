@@ -3,7 +3,6 @@ FROM golang
 LABEL maintainer = "kennethflyon@gmail.com"
 
 # Set up:
-COPY generate_certs priustask/
 COPY app/src/model src/model/
 COPY app/src/main.go priustask/
 RUN go get github.com/lib/pq
