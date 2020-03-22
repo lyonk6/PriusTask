@@ -9,7 +9,7 @@ RUN go get github.com/lib/pq
 RUN mkdir priustask/certs
 
 ## Expose these ports for https and postgresql:
-EXPOSE 8080 5432
+EXPOSE 8080 5432 22
 WORKDIR priustask/
 
 # Build the application:
