@@ -17,7 +17,7 @@ API            | Type           | Return
 /PutTask       | Task           | 200
 /PostTask      | Task           | 200          
 
-To get a list of tasks to do call `/PostTaskTouch`. If a TaskTouch object is marked as `COMPLETED`, `DISMISSED` or `START_UP` an array of 20 tasks is returned. Otherwise and an empty task list is returned.
+To get a list of tasks, use `/PostTaskTouch`. If a TaskTouch object is marked as `COMPLETED`, `DISMISSED` or `START_UP` an array of 20 tasks is returned. Otherwise and an empty task list is returned.
 
 
 ## Database
