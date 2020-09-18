@@ -26,7 +26,7 @@ func connectToTestDatabase(url string) {
 }
 
 func getTestURL() (databaseURL string) {
-	file, err := ioutil.ReadFile("../../../test_params")
+	file, err := ioutil.ReadFile("../../../params")
 
 	//verify the file is not null:
 	if err != nil {
@@ -37,9 +37,11 @@ func getTestURL() (databaseURL string) {
 	mySlice := strings.Split(string(file), "\n")
 
 	//Verify prefix for line 2 and assign databaseURL:
-	if strings.HasPrefix(mySlice[0], "testdb=") && len(mySlice[0]) > 13 {
-		//fmt.Println("test database URL: ", mySlice[3])
-		databaseURL = mySlice[0][7:]
+	fmt.Println("test database URL: ", mySlice[2])
+
+	if strings.HasPrefix(mySlice[2], "testdb=") && len(mySlice[2]) > 13 {
+		databaseURL = mySlice[2][7:]
+		fmt.Println("Here is my dburl: ", databaseURL)
 	} else {
 		panic("Malformed params file. database identifier 'testdb=' and database url expected.")
 	}
