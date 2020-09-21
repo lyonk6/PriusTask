@@ -55,7 +55,7 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
  */
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
-		//fmt.Println("\nRequest: PostTaskTouch- time:", tt.toString())
+		fmt.Println("\nRequest: PostTaskTouch: ", r)
 		//fmt.Println("\nCheck 1")
 		tt := decodeTaskTouch(r)
 		//fmt.Println("Check 2: task touch decoded:", tt.toString())
@@ -116,10 +116,10 @@ func RegisterRoutes() {
 func dumpRequest(w http.ResponseWriter, r *http.Request) {
 	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
-		//fmt.Fprint(w, err.Error())
+		fmt.Fprint(w, err.Error())
 		fmt.Println(string(requestDump))
 	} else {
-		//fmt.Fprint(w, string(requestDump))
+		fmt.Fprint(w, string(requestDump))
 		fmt.Println(string(requestDump))
 	}
 }

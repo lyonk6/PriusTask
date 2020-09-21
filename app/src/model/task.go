@@ -29,7 +29,7 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 	i := 0
 
 	if err != nil {
-		fmt.Println("There was an error the the getTaskList query...")
+		fmt.Println("There was an error in the getTaskList query!!")
 		return tasks, err
 	}
 
