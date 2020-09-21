@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 
@@ -12,7 +13,8 @@ import (
 
 func setTestDatabase() {
 	if db == nil {
-		url := getTestURL()
+		url := os.Getenv("PT_TEST_DB_URL")
+
 		connectToTestDatabase(url)
 	}
 }
