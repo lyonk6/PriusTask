@@ -69,9 +69,11 @@ func RegisterRoutes() {
 		//fmt.Println("Check 6: Check for errors in getTaskList")
 		printError(err)
 		//fmt.Println("Check 7: No errors. Finally encode the tasks.")
+
+		/* TODO Only return a TaskList sometimes.
 		if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
 			fmt.Println("Only return a TL sometimes.")
-		}
+		}//*/
 
 		encodeTaskList(w, tl)
 		//fmt.Println("Check 8: Done")
