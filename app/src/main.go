@@ -28,10 +28,10 @@ func main() {
 	fmt.Println("Listening on port ", portNumber)
 	fmt.Println("database URL: ", url)
 	// Run the api insecurely:
-	http.ListenAndServe(":"+portNumber, nil)
+	//http.ListenAndServe(":"+portNumber, nil)
 
 	// Run with TLS certificates like responsible adults:
-	//http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
+	http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
 }
 
 /**
