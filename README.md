@@ -35,7 +35,7 @@ psql --dbname=prius_task_test -f task.sql
 
 ## Using the API:
 
-###Start up:
+### Start up:
 When the applications starts make a call /PostTaskTouch to retrieve the current task list:
 
 ```
@@ -59,13 +59,13 @@ Any time a task is created, updated, deleted, completed, or dismissed an appropr
 
 Valid task touch types include "UPDATED", "DELETED", "COMPLETED", "DISMISSED", "START_UP" and "CREATED".
 
-###Getting tasks:
+### Getting tasks:
 The only way to retrieve tasks is by calling `/PostTaskTouch`. Tasks will only be returned however if the "touchType" field is marked as `COMPLETED`, `DISMISSED` or `START_UP`. It is not possible to retrieve a particular task, only a list of tasks the AI chooses.
 
-###Creating tasks:
+### Creating tasks:
 To create a new Task use the `/PostTask` method. When doing this, set the taskId=-1. Upon a successful call, the task is returned with it's new taskId.
 
-###Updating a Task:
+### Updating a Task:
 To update a task It is only necessary to use `/PutTask` if the a change is made to the task "memo", "dueDate", "taskLength", or "repeatIntervalInDays" fields.
 
 ```
