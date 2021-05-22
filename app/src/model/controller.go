@@ -55,21 +55,14 @@ func decodeTaskTouch(r *http.Request) TaskTouch {
  */
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("\nRequest: PostTaskTouch: ", r)
+		//fmt.Println("\nRequest: PostTaskTouch: ", r)
 		dumpRequest(w, r)
-		fmt.Println("\nCheck 1: Request received.")
 		tt := decodeTaskTouch(r)
-		fmt.Println("Check 2: task touch decoded:", tt.toString())
 		var tl []Task
-		fmt.Println("Check 3: call postTaskTouch.")
 		err := postTaskTouch(&tt)
-		fmt.Println("Check 4: Check for errors")
 		printError(err)
-		fmt.Println("Check 5: No errors in post task touch. now fetch tasklists.")
 		tl, err = getTaskList(tt) // Here is an error. :(
-		fmt.Println("Check 6: Check for errors in getTaskList")
 		printError(err)
-		fmt.Println("Check 7: No errors. Finally encode the tasks.")
 
 		/* TODO Only return a TaskList sometimes.
 		if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
@@ -77,9 +70,7 @@ func RegisterRoutes() {
 		}//*/
 
 		encodeTaskList(w, tl)
-		fmt.Println("Check 8: Done")
-
-		fmt.Print("Checks 1-8: Done. Request was: PostTaskTouch- time:", tt.toString(), "\n\n")
+		fmt.Print("Done. Request was: PostTaskTouch- time:", tt.toString(), "\n\n")
 		//w.Write([]byte("[]")) //*/
 	})
 
