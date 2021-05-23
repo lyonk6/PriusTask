@@ -15,7 +15,7 @@ import (
  * // TODO also save an instance of this task with the task touch.
  */
 func TestSaveTaskTouch(t *testing.T) {
-	fmt.Println("Start by creating a task touch object. Then call saveTaskTouch()")
+	//fmt.Println("Start by creating a task touch object. Then call saveTaskTouch()")
 	tasktouch := &TaskTouch{}
 	tasktouch.TouchType = "CREATED"
 	tasktouch.Latitude = rand.Float64() * 31
@@ -23,10 +23,10 @@ func TestSaveTaskTouch(t *testing.T) {
 
 	err := saveTaskTouch(tasktouch)
 	checkError(err)
-	fmt.Println("TaskTouch saved. Returned ID=" + strconv.FormatInt(int64(tasktouch.ID), 10))
+	//fmt.Println("TaskTouch saved. Returned ID=" + strconv.FormatInt(int64(tasktouch.ID), 10))
 
 	// Then delete the tasktouch.
-	fmt.Println("Now clean up the database by removing the recently created TaskTouch. ")
+	//fmt.Println("Now clean up the database by removing the recently created TaskTouch. ")
 	statement := `DELETE FROM tasktouch WHERE id='` + strconv.FormatInt(int64(tasktouch.ID), 10) + `'`
 	_, err = db.Exec(statement)
 	checkError(err) //*/
@@ -38,7 +38,6 @@ func TestTouchTask(t *testing.T) {
 	a := [5]int32{1, 2, 3, 4, 5}
 
 	for i, v := range a {
-		fmt.Println(i, " ", v)
 		tt := TaskTouch{}
 		tt.TaskID = v
 		tt.TouchType = "CREATED"
@@ -87,20 +86,20 @@ func TestPostTaskTouch(t *testing.T) {
 	checkError(err)
 
 	// Update the task type and optionally print what we have so far:
-	fmt.Println("Here is the original task and the new TouchType: ")
+	//fmt.Println("Here is the original task and the new TouchType: ")
 	tasktouch.TouchType = "COMPLETED"
-	fmt.Println("\tThe Task ID is:             ", task.ID)
-	fmt.Println("\tThe DueDate is:             ", task.DueDate)
-	fmt.Println("\tThe RepeatInterval is:      ", task.RepeatIntervalInDays)
-	fmt.Println("\tThe Task LastTouchType is:  ", task.LastTouchType)
-	fmt.Println("\tThe TaskTouch TouchType is: ", tasktouch.TouchType) //*/
+	//fmt.Println("\tThe Task ID is:             ", task.ID)
+	//fmt.Println("\tThe DueDate is:             ", task.DueDate)
+	//fmt.Println("\tThe RepeatInterval is:      ", task.RepeatIntervalInDays)
+	//fmt.Println("\tThe Task LastTouchType is:  ", task.LastTouchType)
+	//fmt.Println("\tThe TaskTouch TouchType is: ", tasktouch.TouchType) //*/
 
 	// Now Mark the Task and it's partner TaskTouch as completed. The API should
 	// assign a new due date to this task.
 	err = postTaskTouch(&tasktouch)
 	checkError(err)
 
-	fmt.Println("Here is the updated task: ")
+	//fmt.Println("Here is the updated task: ")
 	// The DueDate on the task should now be 6.048(10)^8v (1 week in milliseconds.)
 	stmt := `SELECT repeatintervalindays, duedate, lasttouchtype FROM task WHERE id=$1`
 	err = db.QueryRow(stmt, task.ID).
@@ -114,10 +113,10 @@ func TestPostTaskTouch(t *testing.T) {
 		panic("Opps. These don't match")
 	}
 
-	fmt.Println("The DueDate is:             ", task.DueDate)
-	fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
-	fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-	fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType) //*/
+	//fmt.Println("The DueDate is:             ", task.DueDate)
+	//fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
+	//fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
+	//fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType) //*/
 
 	// clean up this test by removing the task in question.
 	_, err = db.Exec(`DELETE FROM task WHERE id=$1`, task.ID)

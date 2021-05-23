@@ -1,7 +1,8 @@
 package model
 
 import (
-	"testing"
+    "net/http/httptest"
+    "testing"
 )
 
 func TestRegisterRoutes(t *testing.T) {
@@ -25,8 +26,16 @@ func TestExampleFunc(t *testing.T) {
 
 func TestEncodeTask(t *testing.T) {
 	//(w http.ResponseWriter, t *Task)
-	//Step 1. Create a ResponseWriter w:
+  // Create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+  rr := httptest.NewRecorder()
+
 	//Step 2. Create a task t:
+  task := Task{}
+	task.Memo = "Hello. "
+  task.LastTouchType = "UPDATED"
+
+  encodeTask(rr, &task)
+
 	//Step 3. Validate the task was written to the Writer:
 
 	//encodeTask(w, t)
