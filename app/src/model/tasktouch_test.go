@@ -37,7 +37,7 @@ func TestTouchTask(t *testing.T) {
 	//First pick 5 tasks and set them to CREATED
 	a := [5]int32{1, 2, 3, 4, 5}
 
-	for i, v := range a {
+	for _, v := range a {
 		tt := TaskTouch{}
 		tt.TaskID = v
 		tt.TouchType = "CREATED"

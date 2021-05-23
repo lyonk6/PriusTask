@@ -112,9 +112,6 @@ func touchTask(tt *TaskTouch) error {
 		//fmt.Println("Check 3.6: Non-completed task updated.")
 	}
 	// Finally, return our error if we have one.
-
-	//fmt.Println("Check 3.7: Return error if we have one.")
-	fmt.Println("")
 	return err
 }
 
