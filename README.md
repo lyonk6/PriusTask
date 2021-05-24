@@ -2,11 +2,11 @@
 ---
 Dependencies:
 
-  1. Golang: version 1.11
+  1. Golang: version go1.16.3 
 
   2. Postgres for go package: https://github.com/lib/pq
 
-  3. PostgreSQL 11.5
+  3. PostgreSQL 13.3
 
 
 
