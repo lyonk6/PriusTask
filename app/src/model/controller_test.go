@@ -5,13 +5,26 @@ import (
     "net/http"
     "testing"
     "strings"
-    //"fmt"
 )
 
 func TestRegisterRoutes(t *testing.T) {
     setTestDatabase()
     RegisterRoutes()
     //http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
+}
+
+func dummyTaskTouch() TaskTouch {
+  taskTouch := TaskTouch{}
+  taskTouch.TouchType         = "START_UP"
+  taskTouch.Accuracy          = 1.0
+  taskTouch.Latitude          = 2.0
+  taskTouch.Longitude         = 3.0
+  taskTouch.LocationTimeStamp = 4
+  taskTouch.ID                = 5
+  taskTouch.TaskID            = 6
+  taskTouch.TouchTimeStamp    = 7
+  taskTouch.UserID            = 8
+  return taskTouch
 }
 
 func dummyTask() Task {
@@ -30,17 +43,26 @@ func dummyTask() Task {
 }
 
 func dummyEncodedTask() string {
-  return `{"id":-1,"userId":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED"}`
+  return `{"id":-1,"UserID":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED"}`
 }
 
 // Not a task. Has extra member field "derp":"flerp"
 func dummyTotallyNotATask() string {
-  return `{"id":-1,"userId":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED","derp":"flerp"}`
+  return `{"id":-1,"UserID":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED","derp":"flerp"}`
+}
+
+// Not a taskTouch object.
+func dummyTotallyNotATaskTouch() string {
+  return `{ creationDate: 0, creationLatitude: 0, creationLongitude: 0, dueDate: 1618326000000, id: 112, lastTouchType: "", memo: "New Task Test 1", repeatIntervalInDays: 0, taskLength: 0, touchType: "DISMISSED", UserID: -1 }`
+}
+
+// A taskTouch object.
+func dummyEncodedTaskTouch() string {
+  return `{ "accuracy": 0.0, "id": 0, "latitude": 0.0, "locationTimeStamp": 0, "longitude": 0.0, "TaskID": -1, "touchTimeStamp": 1600729082413, "touchType": "START_UP", "UserID": 0 }`
 }
 
 func TestEncodeTask(t *testing.T) {
-  //(w http.ResponseWriter, t *Task)
-  // Create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+  //Step 1. Create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
   rr := httptest.NewRecorder()
 
   //Step 2. Create a task t:
@@ -51,12 +73,9 @@ func TestEncodeTask(t *testing.T) {
   encoded  := strings.TrimSpace(rr.Body.String())
   expected := dummyEncodedTask()
   if encoded != expected {
-    t.Errorf("handler returned unexpected body: got:\n %v want:\n %v", rr.Body.String(), expected)
+    t.Errorf("handler returned unexpected body: got:\n %v \nwant:\n %v", encoded, expected)
+    t.Errorf("got type: %T. Expect type: %T", encoded, expected)
   }
-}
-
-func TestEncodeTaskList(t *testing.T) {
-    //(w http.ResponseWriter, tl *[]Task)
 }
 
 func TestDecodeTask(t *testing.T) {
@@ -80,10 +99,29 @@ func TestDecodeTask(t *testing.T) {
 
   // Confirm a task with an invalid touch type throws an error
 
-  // Confirm that a tasks with inappropriate fields throws an exeception
+  // Confirm that a task with inappropriate fields throws an exeception
 
 }
 
-func TestDecodeTaskTouch(t *testing.T) {
-    //(r *http.Request) TaskTouch
+func TestDecodeTaskTouchTouch(t *testing.T) {
+  request, err := http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTaskTouch()))
+  if err != nil {
+    t.Fatal(err)
+  }
+
+  taskTouch := decodeTaskTouch(request)
+  if taskTouch != dummyTaskTouch(){
+    t.Fatalf("TaskTouch are not equal: %v : %v", taskTouch, dummyTaskTouch())
+  }
+
+  // Mutate taskTouch and confirm that they no longer match:
+  taskTouch.TouchType = "UPDATED"
+  if taskTouch == dummyTaskTouch(){
+    t.Fatalf("TaskTouch are equal and should not be: %v : %v", taskTouch, dummyTaskTouch())
+  }
+
+  // Confirm a taskTouch with an invalid touch type throws an error
+
+  // Confirm that a taskTouch with inappropriate fields throws an exeception
+
 }
