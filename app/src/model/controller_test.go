@@ -43,22 +43,22 @@ func dummyTask() Task {
 }
 
 func dummyEncodedTask() string {
-  return `{"id":-1,"UserID":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED"}`
+  return `{"id":-1,"userId":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED"}`
 }
 
 // Not a task. Has extra member field "derp":"flerp"
 func dummyTotallyNotATask() string {
-  return `{"id":-1,"UserID":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED","derp":"flerp"}`
+  return `{"id":-1,"userId":0,"memo":"Hello. ","repeatIntervalInDays":1,"taskLength":2,"dueDate":3,"creationDate":4,"creationLongitude":5,"creationLatitude":6,"lastTouchType":"UPDATED","derp":"flerp"}`
 }
 
 // Not a taskTouch object.
 func dummyTotallyNotATaskTouch() string {
-  return `{ creationDate: 0, creationLatitude: 0, creationLongitude: 0, dueDate: 1618326000000, id: 112, lastTouchType: "", memo: "New Task Test 1", repeatIntervalInDays: 0, taskLength: 0, touchType: "DISMISSED", UserID: -1 }`
+  return `{ creationDate: 0, creationLatitude: 0, creationLongitude: 0, dueDate: 1618326000000, id: 112, lastTouchType: "", memo: "New Task Test 1", repeatIntervalInDays: 0, taskLength: 0, touchType: "DISMISSED", userId: -1 }`
 }
 
 // A taskTouch object.
 func dummyEncodedTaskTouch() string {
-  return `{ "accuracy": 0.0, "id": 0, "latitude": 0.0, "locationTimeStamp": 0, "longitude": 0.0, "TaskID": -1, "touchTimeStamp": 1600729082413, "touchType": "START_UP", "UserID": 0 }`
+  return `{ "accuracy": 1.0, "id": 5, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
 }
 
 func TestEncodeTask(t *testing.T) {
@@ -71,10 +71,12 @@ func TestEncodeTask(t *testing.T) {
 
   //Step 3. Validate the task was written to the Writer:\
   encoded  := strings.TrimSpace(rr.Body.String())
+  encoded   = strings.TrimSuffix(encoded, "\n")
   expected := dummyEncodedTask()
   if encoded != expected {
     t.Errorf("handler returned unexpected body: got:\n %v \nwant:\n %v", encoded, expected)
     t.Errorf("got type: %T. Expect type: %T", encoded, expected)
+    t.Errorf("got type: %v. Expect type: %v", len(encoded), len(expected))
   }
 }
 
