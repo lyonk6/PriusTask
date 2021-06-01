@@ -5,12 +5,12 @@
 *workspace/
 *data/
 *~
-# exclude hidden R data files.                                                                                                                                                                          
+# exclude hidden R data files.
 *.Rhistory
 *.RData
-# exclude hidden osx data files.                                                                                                                                                                        
+# exclude hidden osx data files.
 .DS_Store
-temp
+temp.*
 .~lock.*
 # Exclide IDE related files:
 *eclipse*
