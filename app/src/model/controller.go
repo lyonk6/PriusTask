@@ -72,36 +72,34 @@ func RegisterRoutes() {
 
 		encodeTaskList(w, tl)
 		fmt.Print("Done. Request was: PostTaskTouch- time:", tt.toString(), "\n\n")
-		//w.Write([]byte("[]")) //*/
 	})
 
 	// Call updateTask in task.go to update a task in the database.
 	http.HandleFunc("/PutTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
-		fmt.Println("PutTask- Body: ", t.toString())
 		err := updateTask(&t)
 		printError(err)
 		encodeTask(w, &t)
-
 	}) //*/
 
 	//Call creatTask in task.go to add a task to the database.
 	http.HandleFunc("/PostTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
-		fmt.Println("\nRequest: PostTask- Body: ", t.toString())
-		err := createTask(&t)
+    err := createTask(&t)
 		printError(err)
 		encodeTask(w, &t)
-		fmt.Println("Here is the task we are returning: " + t.toString())
-		//w.Write([]byte("200 Success"))
 	}) //*/
 
 	//All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("\n400 Bad Request")
-		w.Write([]byte("400 Bad Request"))
-		dumpRequest(w, r)
+    respondBadRequest(w,r)
 	})
+}
+
+func respondBadRequest(w http.ResponseWriter, r *http.Request) {
+  fmt.Println("\n400 Bad Request")
+  w.Write([]byte("400 Bad Request"))
+  dumpRequest(w, r)
 }
 
 /**
