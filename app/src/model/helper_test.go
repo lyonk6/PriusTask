@@ -40,9 +40,3 @@ func TestToString(t *testing.T) {
     t.Errorf("tasktouch.toString() does not work ")
   }
 }
-
-func checkError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}

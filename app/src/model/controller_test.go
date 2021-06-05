@@ -52,7 +52,7 @@ func dummyTotallyNotATask() string {
 
 // Not a taskTouch object.
 func dummyTotallyNotATaskTouch() string {
-  return `{ "accuracy": 1.0, "id": 5, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
+  return `{ ,, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
   }
 
 // A taskTouch object.
@@ -122,18 +122,25 @@ func TestDecodeTaskTouchTouch(t *testing.T) {
     t.Fatalf("TaskTouch are equal and should not be: %v : %v", taskTouch, dummyTaskTouch())
   }
 
-  // 2. Error case: malformed TaskTouch object
-  // Now let's test an error request:
+  // 2. Error case: Confirm that a taskTouch with inappropriate fields throws an exeception.
   request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTask()))
   if err != nil {
     t.Fatal(err)
   }
 
-  // what happens when we decode a bad taskTouch?
   taskTouch, err = decodeTaskTouch(request)
   if err == nil {
     t.Fatalf("Fatal Error. An invalid object should not be decoded. TaskTouch : %v", taskTouch.toString())
   }
-  // Confirm that a taskTouch with inappropriate fields throws an exeception
 
+
+  request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyTotallyNotATaskTouch()))
+  if err != nil {
+    t.Fatal(err)
+  }
+
+  taskTouch, err = decodeTaskTouch(request)
+  if err == nil {
+    t.Fatalf("Fatal Error. An invalid object should not be decoded. TaskTouch : %v", taskTouch.toString())
+  }
 }
