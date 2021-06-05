@@ -54,8 +54,10 @@ func decodeTaskTouch(r *http.Request) (TaskTouch, error){
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("\nRequest: PostTaskTouch: ", r)
+    // First try to decode the TaskTouch object. Check for an error.
 		dumpRequest(w, r)
 		tt, err := decodeTaskTouch(r)
+    checkError(err)
 
 		var tl []Task
 		err = postTaskTouch(&tt)
@@ -114,6 +116,15 @@ func dumpRequest(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprint(w, string(requestDump))
 		fmt.Println(string(requestDump))
+	}
+}
+
+/**
+ * Check if there's an error. If so, panic.
+ */
+func checkError(err error) {
+	if err != nil {
+		panic(err)
 	}
 }
 
