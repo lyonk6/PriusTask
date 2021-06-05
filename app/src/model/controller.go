@@ -30,6 +30,7 @@ func encodeTaskList(w http.ResponseWriter, tl []Task) {
 
 func decodeTask(r *http.Request) Task {
 	dec := json.NewDecoder(r.Body)
+  dec.DisallowUnknownFields() // Force errors
 	var t Task
 	err := dec.Decode(&t)
 	if err != nil {
@@ -39,15 +40,12 @@ func decodeTask(r *http.Request) Task {
 	}
 }
 
-func decodeTaskTouch(r *http.Request) TaskTouch {
+func decodeTaskTouch(r *http.Request) (TaskTouch, error){
 	dec := json.NewDecoder(r.Body)
+  dec.DisallowUnknownFields() // Force errors
 	var tt TaskTouch
 	err := dec.Decode(&tt)
-	if err != nil {
-		panic(err)
-	} else {
-		return tt
-	}
+  return tt, err
 } //*/
 
 /*RegisterRoutes registers api method calls. Valid method calls include:
@@ -57,9 +55,10 @@ func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("\nRequest: PostTaskTouch: ", r)
 		dumpRequest(w, r)
-		tt := decodeTaskTouch(r)
+		tt, err := decodeTaskTouch(r)
+
 		var tl []Task
-		err := postTaskTouch(&tt)
+		err = postTaskTouch(&tt)
 		printError(err)
 		tl, err = getTaskList(tt) // Here is an error. :(
 		printError(err)

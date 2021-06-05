@@ -10,7 +10,6 @@ import (
 func TestRegisterRoutes(t *testing.T) {
     setTestDatabase()
     RegisterRoutes()
-    //http.ListenAndServeTLS(":"+portNumber, "certs/cert.pem", "certs/key.pem", nil)
 }
 
 func dummyTaskTouch() TaskTouch {
@@ -53,8 +52,8 @@ func dummyTotallyNotATask() string {
 
 // Not a taskTouch object.
 func dummyTotallyNotATaskTouch() string {
-  return `{ creationDate: 0, creationLatitude: 0, creationLongitude: 0, dueDate: 1618326000000, id: 112, lastTouchType: "", memo: "New Task Test 1", repeatIntervalInDays: 0, taskLength: 0, touchType: "DISMISSED", userId: -1 }`
-}
+  return `{ "accuracy": 1.0, "id": 5, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
+  }
 
 // A taskTouch object.
 func dummyEncodedTaskTouch() string {
@@ -81,8 +80,6 @@ func TestEncodeTask(t *testing.T) {
 }
 
 func TestDecodeTask(t *testing.T) {
-  // (r *http.Request) Task
-  // strings.NewReader(data.Encode())
   request, err := http.NewRequest("POST", "/PostTask", strings.NewReader(dummyEncodedTask()))
   if err != nil {
     t.Fatal(err)
@@ -106,24 +103,37 @@ func TestDecodeTask(t *testing.T) {
 }
 
 func TestDecodeTaskTouchTouch(t *testing.T) {
+  // 1. Valid case:
+  // Create a new POST TaskTouch request use "dummyEncodedTaskTouch" and check for errors.
   request, err := http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTaskTouch()))
   if err != nil {
     t.Fatal(err)
   }
 
-  taskTouch := decodeTaskTouch(request)
+  // Next, decode the tasktouch object and validate it is the same as our dummy TaskTouch object:
+  taskTouch, _ := decodeTaskTouch(request)
   if taskTouch != dummyTaskTouch(){
     t.Fatalf("TaskTouch are not equal: %v : %v", taskTouch, dummyTaskTouch())
   }
 
-  // Mutate taskTouch and confirm that they no longer match:
+  // For sanity sake, mutate the taskTouch and confirm that they no longer match:
   taskTouch.TouchType = "UPDATED"
   if taskTouch == dummyTaskTouch(){
     t.Fatalf("TaskTouch are equal and should not be: %v : %v", taskTouch, dummyTaskTouch())
   }
 
-  // Confirm a taskTouch with an invalid touch type throws an error
+  // 2. Error case: malformed TaskTouch object
+  // Now let's test an error request:
+  request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTask()))
+  if err != nil {
+    t.Fatal(err)
+  }
 
+  // what happens when we decode a bad taskTouch?
+  taskTouch, err = decodeTaskTouch(request)
+  if err == nil {
+    t.Fatalf("Fatal Error. An invalid object should not be decoded. TaskTouch : %v", taskTouch.toString())
+  }
   // Confirm that a taskTouch with inappropriate fields throws an exeception
 
 }
