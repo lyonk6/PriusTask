@@ -28,15 +28,15 @@ func connectToTestDatabase(url string) {
 func TestToString(t *testing.T) {
 	task := Task{}
 	task.Memo = "Here is a task."
-  task.RepeatIntervalInDays = 1
-  if task.toString() != "ID: 0, LastTouchType: , Memo:Here is a task., RepeatInterval: 1, TaskLength: 0"{
-    t.Errorf("task.toString() does not work ")
-  }
+	task.RepeatIntervalInDays = 1
+	if task.toString() != "ID: 0, LastTouchType: , Memo:Here is a task., RepeatInterval: 1, TaskLength: 0" {
+		t.Errorf("task.toString() does not work ")
+	}
 
 	tasktouch := TaskTouch{}
 	tasktouch.TouchType = "CREATED"
-  tasktouch.Latitude  = 1
-  if tasktouch.toString() != "Date: 0 Longitude: 0 Latitude: 1 Type: CREATED"{
-    t.Errorf("tasktouch.toString() does not work ")
-  }
+	tasktouch.Latitude = 1
+	if tasktouch.toString() != "Date: 0 Longitude: 0 Latitude: 1 Type: CREATED" {
+		t.Errorf("tasktouch.toString() does not work ")
+	}
 }

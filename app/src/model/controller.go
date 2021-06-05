@@ -30,7 +30,7 @@ func encodeTaskList(w http.ResponseWriter, tl []Task) {
 
 func decodeTask(r *http.Request) Task {
 	dec := json.NewDecoder(r.Body)
-  dec.DisallowUnknownFields() // Force errors
+	dec.DisallowUnknownFields() // Force errors
 	var t Task
 	err := dec.Decode(&t)
 	if err != nil {
@@ -40,12 +40,12 @@ func decodeTask(r *http.Request) Task {
 	}
 }
 
-func decodeTaskTouch(r *http.Request) (TaskTouch, error){
+func decodeTaskTouch(r *http.Request) (TaskTouch, error) {
 	dec := json.NewDecoder(r.Body)
-  dec.DisallowUnknownFields() // Force errors
+	dec.DisallowUnknownFields() // Force errors
 	var tt TaskTouch
 	err := dec.Decode(&tt)
-  return tt, err
+	return tt, err
 } //*/
 
 /*RegisterRoutes registers api method calls. Valid method calls include:
@@ -53,25 +53,24 @@ func decodeTaskTouch(r *http.Request) (TaskTouch, error){
  */
 func RegisterRoutes() {
 	http.HandleFunc("/PostTaskTouch", func(w http.ResponseWriter, r *http.Request) {
-		//fmt.Println("\nRequest: PostTaskTouch: ", r)
-    // First try to decode the TaskTouch object. Check for an error.
-		dumpRequest(w, r)
+		// First try to decode the TaskTouch object. Check for an error.
 		tt, err := decodeTaskTouch(r)
-    checkError(err)
+		if err != nil {
+			respondBadRequest(w, r)
+		} else {
+			var tl []Task
+			err = postTaskTouch(&tt)
+			printError(err)
+			tl, err = getTaskList(tt) // Here is an error. :(
+			printError(err)
 
-		var tl []Task
-		err = postTaskTouch(&tt)
-		printError(err)
-		tl, err = getTaskList(tt) // Here is an error. :(
-		printError(err)
+			/* TODO Only return a TaskList sometimes.
+			   if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
+			     fmt.Println("Only return a TL sometimes.")
+			   }//*/
 
-		/* TODO Only return a TaskList sometimes.
-		if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
-			fmt.Println("Only return a TL sometimes.")
-		}//*/
-
-		encodeTaskList(w, tl)
-		fmt.Print("Done. Request was: PostTaskTouch- time:", tt.toString(), "\n\n")
+			encodeTaskList(w, tl)
+		}
 	})
 
 	// Call updateTask in task.go to update a task in the database.
@@ -85,34 +84,34 @@ func RegisterRoutes() {
 	//Call creatTask in task.go to add a task to the database.
 	http.HandleFunc("/PostTask", func(w http.ResponseWriter, r *http.Request) {
 		t := decodeTask(r)
-    err := createTask(&t)
+		err := createTask(&t)
 		printError(err)
 		encodeTask(w, &t)
 	}) //*/
 
 	//All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-    respondBadRequest(w,r)
+		respondBadRequest(w, r)
 	})
 }
 
 func respondBadRequest(w http.ResponseWriter, r *http.Request) {
-  fmt.Println("\n400 Bad Request")
-  w.Write([]byte("400 Bad Request"))
-  dumpRequest(w, r)
+	fmt.Println("\n400 Bad Request")
+	w.Write([]byte("400 Bad Request"))
+	dumpRequest(r)
 }
 
 /**
  * DumpRequest is used to dump an incomming request to CLI. This is helpful
  * for debugging REST calls. *
  */
-func dumpRequest(w http.ResponseWriter, r *http.Request) {
+func dumpRequest(r *http.Request) {
 	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
-		fmt.Fprint(w, err.Error())
+		//fmt.Fprint(w, err.Error())
 		fmt.Println(string(requestDump))
 	} else {
-		fmt.Fprint(w, string(requestDump))
+		//fmt.Fprint(w, string(requestDump))
 		fmt.Println(string(requestDump))
 	}
 }
