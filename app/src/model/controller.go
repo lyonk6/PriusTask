@@ -28,16 +28,12 @@ func encodeTaskList(w http.ResponseWriter, tl []Task) {
 	}
 }
 
-func decodeTask(r *http.Request) Task {
+func decodeTask(r *http.Request) (Task, error) {
 	dec := json.NewDecoder(r.Body)
 	dec.DisallowUnknownFields() // Force errors
 	var t Task
 	err := dec.Decode(&t)
-	if err != nil {
-		panic(err)
-	} else {
-		return t
-	}
+	return t, err
 }
 
 func decodeTaskTouch(r *http.Request) (TaskTouch, error) {
@@ -75,18 +71,26 @@ func RegisterRoutes() {
 
 	// Call updateTask in task.go to update a task in the database.
 	http.HandleFunc("/PutTask", func(w http.ResponseWriter, r *http.Request) {
-		t := decodeTask(r)
-		err := updateTask(&t)
-		printError(err)
-		encodeTask(w, &t)
+		t, err := decodeTask(r)
+		if err != nil {
+			respondBadRequest(w, r)
+		} else {
+      err = updateTask(&t)
+      printError(err)
+      encodeTask(w, &t)
+  }
 	}) //*/
 
 	//Call creatTask in task.go to add a task to the database.
 	http.HandleFunc("/PostTask", func(w http.ResponseWriter, r *http.Request) {
-		t := decodeTask(r)
-		err := createTask(&t)
-		printError(err)
-		encodeTask(w, &t)
+		t, err := decodeTask(r)
+		if err != nil {
+			respondBadRequest(w, r)
+		} else {
+      err = createTask(&t)
+      printError(err)
+      encodeTask(w, &t)
+    }
 	}) //*/
 
 	//All other requests get dumped.
@@ -108,10 +112,8 @@ func respondBadRequest(w http.ResponseWriter, r *http.Request) {
 func dumpRequest(r *http.Request) {
 	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
-		//fmt.Fprint(w, err.Error())
 		fmt.Println(string(requestDump))
 	} else {
-		//fmt.Fprint(w, string(requestDump))
 		fmt.Println(string(requestDump))
 	}
 }

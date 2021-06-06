@@ -85,7 +85,7 @@ func TestDecodeTask(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	task := decodeTask(request)
+	task, err := decodeTask(request)
 	if task != dummyTask() {
 		t.Fatalf("Tasks are not equal: %v : %v", task, dummyTask())
 	}
