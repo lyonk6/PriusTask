@@ -15,7 +15,6 @@ import (
  * // TODO also save an instance of this task with the task touch.
  */
 func TestSaveTaskTouch(t *testing.T) {
-	//fmt.Println("Start by creating a task touch object. Then call saveTaskTouch()")
 	tasktouch := &TaskTouch{}
 	tasktouch.TouchType = "CREATED"
 	tasktouch.Latitude = rand.Float64() * 31
@@ -23,10 +22,8 @@ func TestSaveTaskTouch(t *testing.T) {
 
 	err := saveTaskTouch(tasktouch)
 	checkError(err)
-	//fmt.Println("TaskTouch saved. Returned ID=" + strconv.FormatInt(int64(tasktouch.ID), 10))
 
 	// Then delete the tasktouch.
-	//fmt.Println("Now clean up the database by removing the recently created TaskTouch. ")
 	statement := `DELETE FROM tasktouch WHERE id='` + strconv.FormatInt(int64(tasktouch.ID), 10) + `'`
 	_, err = db.Exec(statement)
 	checkError(err) //*/
@@ -65,7 +62,6 @@ func TestTouchTask(t *testing.T) {
  *
  */
 func TestPostTaskTouch(t *testing.T) {
-	fmt.Println("TestPostTaskTouch")
 	task := Task{}
 	tasktouch := TaskTouch{}
 	//First create a dummy task and put it in the database. Give it a repeat interval.
@@ -113,14 +109,7 @@ func TestPostTaskTouch(t *testing.T) {
 		panic("Opps. These don't match")
 	}
 
-	//fmt.Println("The DueDate is:             ", task.DueDate)
-	//fmt.Println("Repeat interval is:         ", task.RepeatIntervalInDays)
-	//fmt.Println("The Task LastTouchType is:  ", task.LastTouchType)
-	//fmt.Println("The TaskTouch TouchType is: ", tasktouch.TouchType) //*/
-
 	// clean up this test by removing the task in question.
 	_, err = db.Exec(`DELETE FROM task WHERE id=$1`, task.ID)
 	checkError(err)
-	//_, err = db.Exec(`UPDATE task SET lasttouchtype=$1 WHERE id=$2`, tt.TouchType, task.ID)
-
 }
