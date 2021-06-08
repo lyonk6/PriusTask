@@ -57,15 +57,12 @@ func RegisterRoutes() {
 			var tl []Task
 			err = postTaskTouch(&tt)
 			printError(err)
-			tl, err = getTaskList(tt) // Here is an error. :(
+			tl, err = getTaskList(tt)
 			printError(err)
 
-			/* TODO Only return a TaskList sometimes.
-			   if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
-			     fmt.Println("Only return a TL sometimes.")
-			   }//*/
-
-			encodeTaskList(w, tl)
+			if tt.TouchType == "COMPLETED" || tt.TouchType == "DISMISSED" || tt.TouchType == "START_UP" || tt.TouchType == "HEART_BEAT" {
+				encodeTaskList(w, tl)
+			} //*/
 		}
 	})
 
@@ -75,10 +72,10 @@ func RegisterRoutes() {
 		if err != nil {
 			respondBadRequest(w, r)
 		} else {
-      err = updateTask(&t)
-      printError(err)
-      encodeTask(w, &t)
-  }
+			err = updateTask(&t)
+			printError(err)
+			encodeTask(w, &t)
+		}
 	}) //*/
 
 	//Call creatTask in task.go to add a task to the database.
@@ -87,10 +84,10 @@ func RegisterRoutes() {
 		if err != nil {
 			respondBadRequest(w, r)
 		} else {
-      err = createTask(&t)
-      printError(err)
-      encodeTask(w, &t)
-    }
+			err = createTask(&t)
+			printError(err)
+			encodeTask(w, &t)
+		}
 	}) //*/
 
 	//All other requests get dumped.

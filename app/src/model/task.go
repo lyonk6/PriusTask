@@ -21,7 +21,7 @@ type Task struct {
 
 //Return a list of tasks ordered by due date.
 func getTaskList(tt TaskTouch) ([]Task, error) {
-	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task WHERE lasttouchtype <> $1 AND lasttouchtype <> $2 ORDER BY DueDate ASC LIMIT 10;`, "COMPLETED", "DELETED")
+	rows, err := db.Query(`SELECT id, userid, memo, repeatintervalindays, tasklength, duedate, creationdate, creationlongitude, creationlatitude, lasttouchtype FROM task WHERE lasttouchtype <> $1 AND lasttouchtype <> $2 AND userid = $3 ORDER BY DueDate ASC LIMIT 10;`, "COMPLETED", "DELETED", tt.UserID)
 
 	//var tasks [20]Task
 	tasks := make([]Task, 10)
