@@ -12,7 +12,6 @@ import (
  * it to the database. Then Clean up by removing it from the database.
  *
  * // TODO implement validation that the tt has a valid TouchType, UserID and TaskID.
- * // TODO also save an instance of this task with the task touch.
  */
 func TestSaveTaskTouch(t *testing.T) {
 	tasktouch := &TaskTouch{}

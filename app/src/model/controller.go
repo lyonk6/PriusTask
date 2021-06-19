@@ -90,7 +90,7 @@ func RegisterRoutes() {
 		}
 	}) //*/
 
-	//All other requests get dumped.
+	// All other requests get dumped.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		respondBadRequest(w, r)
 	})

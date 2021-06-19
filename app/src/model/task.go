@@ -33,8 +33,6 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 		return tasks, err
 	}
 
-	//fmt.Print("Here are the columns: ")
-	//fmt.Println(rows.Columns())
 	for rows.Next() {
 		err = rows.Scan(&t.ID, &t.UserID, &t.Memo, &t.RepeatIntervalInDays, &t.TaskLength, &t.DueDate, &t.CreationDate, &t.CreationLongitude, &t.CreationLatitude, &t.LastTouchType)
 
@@ -51,7 +49,6 @@ func getTaskList(tt TaskTouch) ([]Task, error) {
 
 //Update a task in the database.
 func updateTask(t *Task) error {
-	//fmt.Println("updateTask: ", t.toString())
 	_, err := db.Exec(`
 	UPDATE task
 	SET memo             = $1,
