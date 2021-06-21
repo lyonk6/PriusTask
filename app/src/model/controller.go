@@ -18,7 +18,7 @@ func encodeTask(w http.ResponseWriter, t *Task) {
 	}
 }
 
-//Slices have a pointer already so don't pass by reference.
+//Slices are pointers already so don't pass by reference.
 func encodeTaskList(w http.ResponseWriter, tl []Task) {
 	enc := json.NewEncoder(w)
 	err := enc.Encode(tl)

@@ -55,6 +55,11 @@ func dummyTotallyNotATaskTouch() string {
 	return `{ ,, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
 }
 
+// A taskTouch object with an invalid "touchType"
+func dummyEncodedTaskTouchWithBadTouchType() string {
+	return `{ "accuracy": 1.0, "id": 5, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "derp", "userId": 8 }`
+}
+
 // A taskTouch object.
 func dummyEncodedTaskTouch() string {
 	return `{ "accuracy": 1.0, "id": 5, "latitude": 2.0, "locationTimeStamp": 4, "longitude": 3.0, "taskId": 6, "touchTimeStamp": 7, "touchType": "START_UP", "userId": 8 }`
@@ -122,7 +127,7 @@ func TestDecodeTaskTouchTouch(t *testing.T) {
 		t.Fatalf("TaskTouch are equal and should not be: %v : %v", taskTouch, dummyTaskTouch())
 	}
 
-	// 2. Error case: Confirm that a taskTouch with inappropriate fields throws an exeception.
+	// 2. Error case: Confirm that decoding a task object as as TaskTouch throws an error:
 	request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTask()))
 	if err != nil {
 		t.Fatal(err)
@@ -133,6 +138,7 @@ func TestDecodeTaskTouchTouch(t *testing.T) {
 		t.Fatalf("Fatal Error. An invalid object should not be decoded. TaskTouch : %v", taskTouch.toString())
 	}
 
+	// 3. Error case: Confirm that that a nonsense TaskTouch throws an error.
 	request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyTotallyNotATaskTouch()))
 	if err != nil {
 		t.Fatal(err)
@@ -141,5 +147,16 @@ func TestDecodeTaskTouchTouch(t *testing.T) {
 	taskTouch, err = decodeTaskTouch(request)
 	if err == nil {
 		t.Fatalf("Fatal Error. An invalid object should not be decoded. TaskTouch : %v", taskTouch.toString())
+	}
+
+  // 4. Error case: create a TaskTouch object and assign TouchType to an incorrect value:
+  request, err = http.NewRequest("POST", "/PostTaskTouch", strings.NewReader(dummyEncodedTaskTouchWithBadTouchType()))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	taskTouch, err = decodeTaskTouch(request)
+	if err == nil {
+		t.Fatalf("Fatal Error. TouchType should not be encoded. TaskTouch : %v", taskTouch.toString())
 	}
 }
