@@ -5,7 +5,15 @@ import (
 	"strconv"
 )
 
-var touchTypes = []string{"UPDATED", "DELETED", "COMPLETED", "DISMISSED", "START_UP", "HEART_BEAT", "CREATED"}
+var TouchTypes = map[string]bool{
+	"UPDATED":    true,
+	"DELETED":    true,
+	"COMPLETED":  true,
+	"DISMISSED":  true,
+	"START_UP":   true,
+	"HEART_BEAT": true,
+	"CREATED":    true,
+}
 
 //TaskTouch is an instance of a user updating or interacting with a Task.
 type TaskTouch struct {
@@ -26,7 +34,7 @@ type TaskTouch struct {
  * to give this tasktouch an ID.
  */
 func saveTaskTouch(tt *TaskTouch) error {
-	// TODO implement validation that the tt has a valid TouchType, UserID and TaskID.
+	// TODO implement validation that the tt has a valid UserID and TaskID.
 	// TODO also save an instance of this task with the task touch.
 
 	err := db.QueryRow(`
@@ -79,7 +87,7 @@ func touchTask(tt *TaskTouch) error {
 	}
 
 	// Next see if we have a completed task that repeats. If so, set a
-  // new dueDate and save the task as "UPDATED"
+	// new dueDate and save the task as "UPDATED"
 	if tt.TouchType == "COMPLETED" && task.RepeatIntervalInDays > 0 {
 
 		// It is a repeating task and was just completed.

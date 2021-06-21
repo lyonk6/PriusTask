@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httputil"
+  "errors"
 )
 
 func encodeTask(w http.ResponseWriter, t *Task) {
@@ -33,7 +34,10 @@ func decodeTask(r *http.Request) (Task, error) {
 	dec.DisallowUnknownFields() // Force errors
 	var t Task
 	err := dec.Decode(&t)
-	return t, err
+  if !TouchTypes[t.LastTouchType] {
+		err = errors.New("Invalid object touch type.")
+	}
+  return t, err
 }
 
 func decodeTaskTouch(r *http.Request) (TaskTouch, error) {
@@ -41,6 +45,9 @@ func decodeTaskTouch(r *http.Request) (TaskTouch, error) {
 	dec.DisallowUnknownFields() // Force errors
 	var tt TaskTouch
 	err := dec.Decode(&tt)
+  if !TouchTypes[tt.TouchType] {
+		err = errors.New("Invalid object touch type.")
+	}
 	return tt, err
 } //*/
 
